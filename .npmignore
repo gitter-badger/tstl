@@ -1,13 +1,15 @@
 # ======================================================
 #	TYPESCRIPT
 # ======================================================
+node_modules
+api
+design
+
 .git
-api\
-design\
-ts\
-
-*.bat
-*.log
-*.*ignore
-
-build.js
+.vs
+*.ts
+!*.d.ts
+*.sln
+*.*proj
+bin
+obj
