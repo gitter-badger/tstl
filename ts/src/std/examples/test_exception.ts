@@ -1,6 +1,6 @@
 ﻿/// <reference path="../API.ts" />
 
-namespace std.example
+namespace std.examples
 {
 	export function test_exception(): void
 	{

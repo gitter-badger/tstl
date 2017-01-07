@@ -1,32 +1,45 @@
 const fs = require("fs");
 const process = require('child_process');
 
-compile();
-attach_header();
-remove_dynamics();
-minify();
+const ROOT = __dirname + "\\";
+const TS = ROOT + "ts\\";
+const TYPINGS = TS + "src\\typings\\tstl\\";
 
-function compile()
+main();
+
+function main()
 {
-	process.execSync("tsc -p ts/tsconfig.json");
+	//--------
+	// TYPESCRIPT-STL
+	//--------
+	compile(TS + "index.json");
+	concat(TYPINGS + "index.d.ts", ROOT + "index.d.ts");
+	remove_dynamics(ROOT + "index.js");
+
+	//--------
+	// FILE-SYSTEM
+	//--------
+	compile(TS + "filesystem.json");
+	concat(TYPINGS + "filesystem.d.ts", ROOT + "filesystem.d.ts");
+	remove_dynamics(ROOT + "filesystem.js");
 }
 
-function attach_header()
+function compile(config)
 {
-	const TITLE_FILE = "./ts/src/typings/tstl/tstl.d.ts";
-	const HEADER_FILE = "./lib/tstl.d.ts";
-
-	var text = fs.readFileSync(TITLE_FILE, "utf8");
-	text += fs.readFileSync(HEADER_FILE, "utf8");
-
-	fs.writeFileSync(HEADER_FILE, text, "utf8");
+	process.execSync("tsc -p \"" + config + "\"");
 }
 
-function remove_dynamics()
+function concat(x, y, ret = y)
 {
-	const JS_FILE = "./lib/tstl.js";
-	
-	var text = fs.readFileSync(JS_FILE, "utf8");
+	var text = fs.readFileSync(x, "utf8");
+	text += fs.readFileSync(y, "utf8");
+
+	fs.writeFileSync(ret, text, "utf8");
+}
+
+function remove_dynamics(file)
+{
+	var text = fs.readFileSync(file, "utf8");
 	if (text.indexOf('["') == -1)
 		return;
 
@@ -51,10 +64,10 @@ function remove_dynamics()
 		
 		text = text.split(org).join(repl);
 	}
-	fs.writeFileSync(JS_FILE, text, "utf8");
+	fs.writeFileSync(file, text, "utf8");
 }
 
-function minify()
+function minify(file)
 {
-	process.execSync("minify lib/tstl.js");
+	process.execSync("minify " + file);
 }

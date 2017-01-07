@@ -2,20 +2,20 @@
 
 /// <reference path="../Vector.ts" />
 
-namespace std.example
+namespace std.examples
 {
 	export function test_all(): void
 	{
 		console.log("TEST ALL");
 		
-		for (let key in std.example)
-			if (key != "test_all" && (std.example as any)[key] instanceof Function)
+		for (let key in std.examples)
+			if (key != "test_all" && (std.examples as any)[key] instanceof Function)
 			{
 				console.log("===================================================");
 				console.log("	" + key);
 				console.log("===================================================");
 
-				(std.example as any)[key]();
+				(std.examples as any)[key]();
 			}
 	}
 }

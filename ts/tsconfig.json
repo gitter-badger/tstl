@@ -1,8 +1,0 @@
-{
-    "compilerOptions": {
-        "target": "es5",
-        "declaration": true,
-        "outFile": "../lib/tstl.js"
-    },
-    "exclude": ["src/std/example"]
-}

@@ -1,0 +1,14 @@
+﻿{
+  "compilerOptions": {
+    "target": "es5",
+    "outFile": "../filesystem.js",
+
+    "declaration": true,
+    "noImplicitAny": true,
+    "lib": [ "dom", "es2015.promise", "es5" ]
+  },
+  "exclude": [ 
+    "src/std",
+    "src/typings/tstl"
+  ]
+}

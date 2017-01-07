@@ -2,7 +2,7 @@
 
 /// <reference path="../List.ts" />
 
-namespace std.example
+namespace std.examples
 {
 	export function test_list(): void
 	{
