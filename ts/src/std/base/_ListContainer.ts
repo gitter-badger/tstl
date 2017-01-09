@@ -311,8 +311,8 @@ namespace std.base
 				prev = item;
 			}
 
-			// IF WAS EMPTY, VAL IS THE BEGIN
-			if (this.empty() == true || first.prev().equals(this.end()) == true)
+			// WILL FIRST BE THE BEGIN?
+			if (position.equals(this.begin()) == true)
 				this._Set_begin(first);
 
 			// CONNECT BETWEEN LAST INSERTED ITEM AND POSITION
@@ -343,17 +343,18 @@ namespace std.base
 			{
 				// CONSTRUCT ITEM, THE NEW ELEMENT
 				let item: BidirectionalIterator = this._Create_iterator(prev, null, it.value);
+				if (size == 0)
+					first = item;
 
-				if (size == 0) first = item;
-				if (prev != null) prev["next_"] = (item);
+				prev["next_"] = item;
 
 				// SHIFT CURRENT ITEM TO PREVIOUS
 				prev = item;
 				size++;
 			}
 
-			// IF WAS EMPTY, FIRST ELEMENT IS THE BEGIN
-			if (this.empty() == true)
+			// WILL FIRST BE THE BEGIN?
+			if (position.equals(this.begin()) == true)
 				this._Set_begin(first);
 
 			// CONNECT BETWEEN LAST AND POSITION
