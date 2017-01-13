@@ -748,7 +748,7 @@ namespace std
 				// WHEN FITTING INTO RESERVED CAPACITY IS POSSIBLE
 				// ------------------------------------------------------
 				// INSERTS CAREFULLY CONSIDERING THE COL_SIZE
-				let index_pair = this._Fetch_index(position.index);
+				let index_pair = this._Fetch_index(position.index());
 				let index = index_pair.first;
 
 				let spliced_values = this.matrix_[index].splice(index_pair.second);
@@ -785,7 +785,7 @@ namespace std
 				}
 				else
 				{
-					let indexPair = this._Fetch_index(position.index);
+					let indexPair = this._Fetch_index(position.index());
 					let index = indexPair.first;
 
 					let splicedValues = this.matrix_[index].splice(indexPair.second);
@@ -858,22 +858,22 @@ namespace std
 		 */
 		protected _Erase_by_range(first: DequeIterator<T>, last: DequeIterator<T>): DequeIterator<T>
 		{
-			if (first.index == -1)
+			if (first.index() == -1)
 				return first;
 
 			// INDEXING
 			let size: number;
-			if (last.index == -1) // LAST IS END()
-				size = this.size() - first.index;
+			if (last.index() == -1) // LAST IS END()
+				size = this.size() - first.index();
 			else // LAST IS NOT END()
-				size = last.index - first.index;
+				size = last.index() - first.index();
 			
 			this.size_ -= size;
 			 
 			// ERASING
 			while (size != 0)
 			{
-				let indexPair: Pair<number, number> = this._Fetch_index(first.index);
+				let indexPair: Pair<number, number> = this._Fetch_index(first.index());
 				let array: Array<T> = this.matrix_[indexPair.first];
 
 				let myDeleteSize: number = Math.min(size, array.length - indexPair.second);
@@ -885,7 +885,7 @@ namespace std
 				size -= myDeleteSize;
 			}
 			
-			if (last.index == -1)
+			if (last.index() == -1)
 				return this.end();
 			else
 				return first;
@@ -976,12 +976,17 @@ namespace std
 		/* ---------------------------------------------------------
 			ACCESSORS
 		--------------------------------------------------------- */
+		public source(): Deque<T>
+		{
+			return this.source_ as Deque<T>;
+		}
+
 		/**
 		 * @inheritdoc
 		 */
 		public get value(): T
 		{
-			return (this.source_ as Deque<T>).at(this.index_);
+			return this.source().at(this.index_);
 		}
 
 		/**
@@ -991,13 +996,13 @@ namespace std
 		 */
 		public set value(val: T)
 		{
-			(this.source_ as Deque<T>).set(this.index_, val);
+			this.source().set(this.index_, val);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public get index(): number
+		public index(): number
 		{
 			return this.index_;
 		}
@@ -1011,11 +1016,11 @@ namespace std
 		public prev(): DequeIterator<T>
 		{
 			if (this.index_ == -1)
-				return new DequeIterator(this.source_ as Deque<T>, this.source_.size() - 1);
+				return new DequeIterator(this.source(), this.source().size() - 1);
 			else if (this.index_ - 1 < 0)
-				return (this.source_ as Deque<T>).end();
+				return this.source().end();
 			else
-				return new DequeIterator<T>(this.source_ as Deque<T>, this.index_ - 1);
+				return new DequeIterator<T>(this.source(), this.index_ - 1);
 		}
 
 		/**
@@ -1023,10 +1028,10 @@ namespace std
 		 */
 		public next(): DequeIterator<T>
 		{
-			if (this.index_ >= this.source_.size() - 1)
-				return (this.source_ as Deque<T>).end();
+			if (this.index_ >= this.source().size() - 1)
+				return this.source().end();
 			else
-				return new DequeIterator<T>(this.source_ as Deque<T>, this.index_ + 1);
+				return new DequeIterator<T>(this.source(), this.index_ + 1);
 		}
 
 		/**
@@ -1036,14 +1041,14 @@ namespace std
 		{
 			let new_index: number;
 			if (n < 0 && this.index_ == -1)
-				new_index = this.source_.size() + n;
+				new_index = this.source().size() + n;
 			else
 				new_index = this.index_ + n;
 
-			if (new_index < 0 || new_index >= this.source_.size())
-				return (this.source_ as Deque<T>).end();
+			if (new_index < 0 || new_index >= this.source().size())
+				return this.source().end();
 			else
-				return new DequeIterator<T>(this.source_ as Deque<T>, new_index);
+				return new DequeIterator<T>(this.source(), new_index);
 		}
 
 		/* ---------------------------------------------------------
@@ -1081,7 +1086,7 @@ namespace std
 	 * @author Jeongho Nam <http://samchon.org>
 	 */
 	export class DequeReverseIterator<T>
-		extends ReverseIterator<T, DequeIterator<T>, DequeReverseIterator<T>>
+		extends ReverseIterator<T, Deque<T>, DequeIterator<T>, DequeReverseIterator<T>>
 		implements base.IArrayIterator<T>
 	{
 		/* ---------------------------------------------------------
@@ -1129,9 +1134,9 @@ namespace std
 		/**
 		 * Get index.
 		 */
-		public get index(): number
+		public index(): number
 		{
-			return this.base_.index;
+			return this.base_.index();
 		}
 	}
 }

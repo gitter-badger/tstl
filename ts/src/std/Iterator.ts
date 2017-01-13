@@ -31,7 +31,7 @@ namespace std
 		/**
 		 * Source container of the iterator is directing for.
 		 */
-		protected source_: base.Container<T>;
+		protected source_: Array<T> | base.Container<T>;
 
 		/* ---------------------------------------------------------
 			CONSTRUCTORS
@@ -41,7 +41,7 @@ namespace std
 		 *
 		 * @param source The source container.
 		 */
-		protected constructor(source: base.Container<T>)
+		protected constructor(source: Array<T> | base.Container<T>)
 		{
 			this.source_ = source;
 		}
@@ -72,32 +72,32 @@ namespace std
 		 * @param n Number of element positions to advance.
 		 * @return An advanced iterator.
 		 */
-		public advance(n: number): Iterator<T>
-		{
-			let it: Iterator<T> = this;
-			let i: number;
+		public abstract advance(n: number): Iterator<T>;
+		//{
+		//	let it: Iterator<T> = this;
+		//	let i: number;
 
-			if (n >= 0 )
-			{
-				for (i = 0; i < n; i++)
-					if (it.equals(this.source_.end()))
-						return this.source_.end();
-					else
-						it = it.next();
-			}
-			else
-			{
-				n = n * -1;
+		//	if (n >= 0 )
+		//	{
+		//		for (i = 0; i < n; i++)
+		//			if (it.equals(this.source_.end()))
+		//				return this.source_.end();
+		//			else
+		//				it = it.next();
+		//	}
+		//	else
+		//	{
+		//		n = n * -1;
 
-				for (i = 0; i < n; i++)
-					if (it.equals(this.source_.end()))
-						return this.source_.end();
-					else
-						it = it.prev();
-			}
+		//		for (i = 0; i < n; i++)
+		//			if (it.equals(this.source_.end()))
+		//				return this.source_.end();
+		//			else
+		//				it = it.prev();
+		//	}
 
-			return it;
-		}
+		//	return it;
+		//}
 
 		/* ---------------------------------------------------------
 			ACCESSORS
@@ -105,10 +105,7 @@ namespace std
 		/**
 		 * Get source container.
 		 */
-		public source(): base.Container<T>
-		{
-			return this.source_;
-		}
+		public abstract source(): Array<T> | base.Container<T>;
 
 		/**
 		 * <p> Whether an iterator is equal with the iterator. </p>
@@ -166,7 +163,9 @@ namespace std
 	 * @reference http://www.cplusplus.com/reference/iterator/reverse_iterator
 	 * @author Jeongho Nam <http://samchon.org>
 	 */
-	export abstract class ReverseIterator<T, Base extends Iterator<T>, This extends ReverseIterator<T, Base, This>>
+	export abstract class ReverseIterator
+		<T, Source extends Array<T> | base.Container<T>,
+			Base extends Iterator<T>, This extends ReverseIterator<T, Source, Base, This>>
 		extends Iterator<T>
 	{
 		/**
@@ -184,13 +183,25 @@ namespace std
 		 */
 		protected constructor(base: Base)
 		{
-			if (base == null)
-				super(null);
-			else
-			{
-				super(base.source());
-				this.base_ = base.prev() as Base;
-			}
+			super(base.source());
+			this.base_ = base.prev() as Base;
+		}
+
+		// CREATE A NEW OBJECT WITH SAME (DERIVED) TYPE
+		/**
+		 * @hidden
+		 */
+		protected abstract _Create_neighbor(base: Base): This;
+
+		/* ---------------------------------------------------------
+			ACCESSORS
+		--------------------------------------------------------- */
+		/**
+		 * @inheritdoc
+		 */
+		public source(): Source
+		{
+			return this.base_.source() as Source;
 		}
 
 		/**
@@ -209,15 +220,6 @@ namespace std
 			return this.base_.next() as Base;
 		}
 
-		// CREATE A NEW OBJECT WITH SAME (DERIVED) TYPE
-		/**
-		 * @hidden
-		 */
-		protected abstract _Create_neighbor(base: Base): This;
-
-		/* ---------------------------------------------------------
-			ACCESSORS
-		--------------------------------------------------------- */
 		/**
 		 * <p> Get value of the iterator is pointing. </p>
 		 * 
@@ -277,12 +279,29 @@ namespace std
 
 	/* =========================================================
 		GLOBAL FUNCTIONS
+			- ACCESSORS
 			- MOVERS
-			- BEGIN
-			- END
+			- FACTORY
 	============================================================
-		MOVERS
+		ACCESSORS
 	--------------------------------------------------------- */
+	export function size<T>(array: Array<T>): number;
+	export function size<T>(container: base.Container<T>): number;
+
+	export function size<T>(container: Array<T> | base.Container<T>): number {
+		if (container instanceof Array)
+			return container.length;
+		else
+			return container.size();
+	}
+
+	export function empty<T>(array: Array<T>): boolean;
+	export function empty<T>(container: base.Container<T>): boolean;
+
+	export function empty<T>(container: Array<T> | base.Container<T>): boolean {
+		return size(container as Array<T>) == 0;
+	}
+
 	/**
 	 * <p> Return distance between {@link Iterator iterators}. </p>
 	 * 
@@ -313,6 +332,9 @@ namespace std
 		return length;
 	}
 
+	/* ---------------------------------------------------------
+		MOVERS
+	--------------------------------------------------------- */
 	/**
 	 * <p> Advance iterator. </p>
 	 * 
@@ -362,153 +384,185 @@ namespace std
 	}
 
 	/* ---------------------------------------------------------
-		BEGIN
+		FACTORY
 	--------------------------------------------------------- */
 	/**
-	 * <p> Iterator to beginning. </p>
+	 * Iterator to beginning.
 	 * 
-	 * <p> Returns an iterator pointing to the first element in the sequence. </p>
+	 * Returns an iterator pointing to the first element in the sequence.
 	 * 
-	 * <p> If the sequence is empty, the returned value shall not be dereferenced. </p>
+	 * If the sequence is {@link empty}, the returned value shall not be dereferenced.
 	 * 
-	 * @param container A container object of a class type for which member {@link IContainer.begin begin} is defined.
-	 * 
-	 * @return The same as returned by {@link IContainer.begin container.begin()}.
+	 * @param array An array object.
+	 * @return {@link ArrayIterator} object.
 	 */
+	export function begin<T>(array: Array<T>): ArrayIterator<T>;
+
+	/**
+	 * Iterator to beginning.
+	 * 
+	 * Returns an iterator pointing to the first element in the sequence.
+	 * 
+	 * If the sequence is {@link empty}, the returned value shall not be dereferenced.
+	 * 
+	 * @param container A container object of a class type for which member {@link Container.begin begin} is defined.
+	 * @return The same as returned by {@link Container.begin container.begin()}.
+	 */
+	export function begin<T>(container: base.Container<T>): Iterator<T>;
+
 	export function begin<T>(container: Vector<T>): VectorIterator<T>;
-
-	/**
-	 * <p> Iterator to beginning. </p>
-	 * 
-	 * <p> Returns an iterator pointing to the first element in the sequence. </p>
-	 * 
-	 * <p> If the sequence is empty, the returned value shall not be dereferenced. </p>
-	 * 
-	 * @param container A container object of a class type for which member {@link IContainer.begin begin} is defined.
-	 * 
-	 * @return The same as returned by {@link IContainer.begin container.begin()}.
-	 */
 	export function begin<T>(container: List<T>): ListIterator<T>;
-
-	/**
-	 * <p> Iterator to beginning. </p>
-	 * 
-	 * <p> Returns an iterator pointing to the first element in the sequence. </p>
-	 * 
-	 * <p> If the sequence is empty, the returned value shall not be dereferenced. </p>
-	 * 
-	 * @param container A container object of a class type for which member {@link IContainer.begin begin} is defined.
-	 * 
-	 * @return The same as returned by {@link IContainer.begin container.begin()}.
-	 */
 	export function begin<T>(container: Deque<T>): DequeIterator<T>;
-
-	/**
-	 * <p> Iterator to beginning. </p>
-	 * 
-	 * <p> Returns an iterator pointing to the first element in the sequence. </p>
-	 * 
-	 * <p> If the sequence is empty, the returned value shall not be dereferenced. </p>
-	 * 
-	 * @param container A container object of a class type for which member {@link IContainer.begin begin} is defined.
-	 * 
-	 * @return The same as returned by {@link IContainer.begin container.begin()}.
-	 */
 	export function begin<T>(container: base.SetContainer<T>): SetIterator<T>;
-
-	/**
-	 * <p> Iterator to beginning. </p>
-	 * 
-	 * <p> Returns an iterator pointing to the first element in the sequence. </p>
-	 * 
-	 * <p> If the sequence is empty, the returned value shall not be dereferenced. </p>
-	 * 
-	 * @param container A container object of a class type for which member {@link IContainer.begin begin} is defined.
-	 * 
-	 * @return The same as returned by {@link IContainer.begin container.begin()}.
-	 */
 	export function begin<Key, T>(container: base.MapContainer<Key, T>): MapIterator<Key, T>;
 
 	// typedef is not specified in TypeScript yet.
 	// Instead, I listed all the containers and its iterators as overloaded functions
-	export function begin<T>(container: base.Container<T>): Iterator<T>
+	export function begin<T>(container: Array<T> | base.Container<T>): Iterator<T>
 	{
-		return container.begin();
+		if (container instanceof Array)
+			return new ArrayIterator(container, container.length ? 0 : -1);
+		else
+			return container.begin();
 	}
 
-
-	/* ---------------------------------------------------------
-		END
-	--------------------------------------------------------- */
 	/**
-	 * <p> Iterator to end. </p>
+	 * Iterator to reverse-beginning.
 	 * 
-	 * <p> Returns an iterator pointing to the <i>past-the-end</i> element in the sequence. </p>
+	 * Returns a reverse iterator pointing to the last element in the sequence.
 	 * 
-	 * <p> If the sequence is {@link IContainer.empty empty}, the returned value compares equal to the one returned by {@link begin} with the same argument. </p>
+	 * If the sequence is {@link empty}, the returned value shall not be dereferenced.
 	 * 
-	 * @param container A container of a class type for which member {@link IContainer.end end} is defined.
-	 * 
-	 * @return The same as returned by {@link IContainer.end container.end()}.
+	 * @param array An array object.
+	 * @return {@link ArrayIterator} object.
 	 */
+	export function rbegin<T>(array: Array<T>): ArrayReverseIterator<T>;
+
+	/**
+	 * Iterator to reverse-beginning.
+	 * 
+	 * Returns a reverse iterator pointing to the last element in the sequence.
+	 * 
+	 * If the sequence is {@link empty}, the returned value shall not be dereferenced.
+	 * 
+	 * @param container A container object of a class type for which member {@link Container.rbegin rbegin} is defined.
+	 * @return The same as returned by {@link Container.rbegin container.rbegin()}.
+	 */
+	export function rbegin<T>(container: base.Container<T>): base.IReverseIterator<T>;
+
+	export function rbegin<T>(container: Vector<T>): VectorReverseIterator<T>;
+	export function rbegin<T>(container: List<T>): ListReverseIterator<T>;
+	export function rbegin<T>(container: Deque<T>): DequeReverseIterator<T>;
+	export function rbegin<T>(container: base.SetContainer<T>): SetReverseIterator<T>;
+	export function rbegin<Key, T>(container: base.MapContainer<Key, T>): MapReverseIterator<Key, T>;
+
+	export function rbegin<T>(container: Array<T> | base.Container<T>): ArrayReverseIterator<T> | base.IReverseIterator<T>
+	{
+		if (container instanceof Array)
+			return new ArrayReverseIterator<T>(end(container));
+		else
+			return container.rbegin();
+	}
+	
+	/**
+	 * Iterator to end.
+	 * 
+	 * Returns an iterator pointing to the <i>past-the-end</i> element in the sequence.
+	 * 
+	 * If the sequence is {@link empty}, the returned value compares equal to the one returned by {@link begin} with the same argument.
+	 * 
+	 * @param array An array object.
+	 * @return {@link ArrayIterator} object.
+	 */
+	export function end<T>(array: Array<T>): ArrayIterator<T>;
+
+	/**
+	 * Iterator to end.
+	 * 
+	 * Returns an iterator pointing to the <i>past-the-end</i> element in the sequence.
+	 * 
+	 * If the sequence is {@link empty}, the returned value compares equal to the one returned by {@link begin} with the same argument.
+	 * 
+	 * @param container A container of a class type for which member {@link Container.end end} is defined.
+	 * @return The same as returned by {@link Container.end container.end()}.
+	 */
+	export function end<T>(container: base.Container<T>): Iterator<T>;
+
 	export function end<T>(container: Vector<T>): VectorIterator<T>;
-
-	/**
-	 * <p> Iterator to end. </p>
-	 * 
-	 * <p> Returns an iterator pointing to the <i>past-the-end</i> element in the sequence. </p>
-	 * 
-	 * <p> If the sequence is {@link IContainer.empty empty}, the returned value compares equal to the one returned by {@link begin} with the same argument. </p>
-	 * 
-	 * @param container A container of a class type for which member {@link IContainer.end end} is defined.
-	 * 
-	 * @return The same as returned by {@link IContainer.end container.end()}.
-	 */
 	export function end<T>(container: List<T>): ListIterator<T>;
-
-	/**
-	 * <p> Iterator to end. </p>
-	 * 
-	 * <p> Returns an iterator pointing to the <i>past-the-end</i> element in the sequence. </p>
-	 * 
-	 * <p> If the sequence is {@link IContainer.empty empty}, the returned value compares equal to the one returned by {@link begin} with the same argument. </p>
-	 * 
-	 * @param container A container of a class type for which member {@link IContainer.end end} is defined.
-	 * 
-	 * @return The same as returned by {@link IContainer.end container.end()}.
-	 */
 	export function end<T>(container: Deque<T>): DequeIterator<T>;
-
-	/**
-	 * <p> Iterator to end. </p>
-	 * 
-	 * <p> Returns an iterator pointing to the <i>past-the-end</i> element in the sequence. </p>
-	 * 
-	 * <p> If the sequence is {@link IContainer.empty empty}, the returned value compares equal to the one returned by {@link begin} with the same argument. </p>
-	 * 
-	 * @param container A container of a class type for which member {@link IContainer.end end} is defined.
-	 * 
-	 * @return The same as returned by {@link IContainer.end container.end()}.
-	 */
 	export function end<T>(container: base.SetContainer<T>): SetIterator<T>;
-
-	/**
-	 * <p> Iterator to end. </p>
-	 * 
-	 * <p> Returns an iterator pointing to the <i>past-the-end</i> element in the sequence. </p>
-	 * 
-	 * <p> If the sequence is {@link IContainer.empty empty}, the returned value compares equal to the one returned by {@link begin} with the same argument. </p>
-	 * 
-	 * @param container A container of a class type for which member {@link IContainer.end end} is defined.
-	 * 
-	 * @return The same as returned by {@link IContainer.end container.end()}.
-	 */
 	export function end<Key, T>(container: base.MapContainer<Key, T>): MapIterator<Key, T>;
 
-	// typedef is not specified in TypeScript yet.
-	// Instead, I listed all the containers and its iterators as overloaded functions
-	export function end<T>(container: base.Container<T>): Iterator<T>
+	export function end<T>(container: Array<T> | base.Container<T>): Iterator<T>
 	{
-		return container.end();
+		if (container instanceof Array)
+			return new ArrayIterator<T>(container, -1);
+		else
+			return container.end();
+	}
+
+	/**
+	 * Iterator to reverse-end.
+	 * 
+	 * Returns a reverse iterator pointing to the <i>past-the-end</i> element in the sequence.
+	 * 
+	 * If the sequence is {@link empty}, the returned value compares equal to the one returned by {@link rbegin} with the same argument.
+	 * 
+	 * @param array An array object.
+	 * @return {@link ArrayIterator} object.
+	 */
+	export function rend<T>(array: Array<T>): ArrayReverseIterator<T>;
+
+	/**
+	 * Iterator to reverse-end.
+	 * 
+	 * Returns an reverse iterator pointing to the <i>past-the-end</i> element in the sequence.
+	 * 
+	 * If the sequence is {@link empty}, the returned value compares equal to the one returned by {@link rbegin} with the same argument.
+	 * 
+	 * @param container A container of a class type for which member {@link Container.rend rend} is defined.
+	 * @return The same as returned by {@link Container.rend container.rend()}.
+	 */
+	export function rend<T>(container: base.Container<T>): base.IReverseIterator<T>;
+
+	export function rend<T>(container: Vector<T>): VectorReverseIterator<T>;
+	export function rend<T>(container: List<T>): ListReverseIterator<T>;
+	export function rend<T>(container: Deque<T>): DequeReverseIterator<T>;
+	export function rend<T>(container: base.SetContainer<T>): SetReverseIterator<T>;
+	export function rend<Key, T>(container: base.MapContainer<Key, T>): MapReverseIterator<Key, T>;
+
+	export function rend<T>(container: Array<T> | base.Container<T>): ArrayReverseIterator<T> | base.IReverseIterator<T> {
+		if (container instanceof Array)
+			return new ArrayReverseIterator<T>(begin(container));
+		else
+			return container.rend();
+	}
+
+	export function make_reverse_iterator<T>(it: ArrayIterator<T>): ArrayReverseIterator<T>;
+	export function make_reverse_iterator<T>(it: VectorIterator<T>): VectorReverseIterator<T>;
+	export function make_reverse_iterator<T>(it: DequeIterator<T>): DequeReverseIterator<T>;
+	export function make_reverse_iterator<T>(it: ListIterator<T>): ListReverseIterator<T>;
+	export function make_reverse_iterator<T>(it: SetIterator<T>): SetReverseIterator<T>;
+	export function make_reverse_iterator<Key, T>(it: MapIterator<Key, T>): MapReverseIterator<Key, T>;
+
+	export function make_reverse_iterator<T>(it: Iterator<T>)
+		: ArrayReverseIterator<T> | base.IReverseIterator<T> | MapReverseIterator<any, any>
+	{
+		// LINEAR CONTAINERS
+		if (it instanceof ArrayIterator)
+			return new ArrayReverseIterator<T>(it);
+		else if (it instanceof VectorIterator)
+			return new VectorReverseIterator<T>(it);
+		else if (it instanceof DequeIterator)
+			return new DequeReverseIterator<T>(it);
+		else if (it instanceof ListIterator)
+			return new ListReverseIterator<T>(it);
+
+		// ASSOCIATIVE CONTAINERS
+		else if (it instanceof SetIterator)
+			return new SetReverseIterator<T>(it);
+		else if (it instanceof MapIterator)
+			return new MapReverseIterator<any, any>(it);
 	}
 }

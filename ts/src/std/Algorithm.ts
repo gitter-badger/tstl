@@ -204,7 +204,7 @@ namespace std
 		): boolean
 	{
 		while (!first1.equals(last1))
-			if (first2.equals(first2.source().end()) || !pred(first1.value, first2.value))
+			if (first2.equals(end(first2.source() as T[])) || !pred(first1.value, first2.value))
 				return false;
 			else
 			{
@@ -299,7 +299,7 @@ namespace std
 				first2 = first2.next() as Iterator2;
 			}
 
-		return !std.equal_to(last2, last2.source().end()) && !std.equal_to(first2.value, last2.value);
+		return !std.equal_to(last2, <any>end(last2.source() as T[]) as Iterator2) && !std.equal_to(first2.value, last2.value);
 	}
 
 	/* ---------------------------------------------------------
@@ -852,7 +852,7 @@ namespace std
 			compare: (x: T, y: T) => boolean = std.equal_to
 		): Pair<Iterator1, Iterator2>
 	{
-		while (!first1.equals(last1) && !first2.equals(first2.source().end())
+		while (!first1.equals(last1) && !first2.equals(end(first2.source() as T[]))
 			&& std.equal_to(first1.value, first2.value))
 		{
 			first1 = first1.next() as Iterator1;
@@ -917,10 +917,7 @@ namespace std
 
 		return cnt;
 	}
-}
 
-namespace std
-{
 	/* =========================================================
 		MODIFIERS (MODIFYING SEQUENCE)
 			- FILL
@@ -1320,7 +1317,7 @@ namespace std
 		for (let it = first.next(); !it.equals(last);)
 		{
 			if (std.equal_to(it.value, it.prev().value) == true)
-				it = it.source().erase(it) as InputIterator;
+				it = _Erase(it);
 			else
 			{
 				ret = it as InputIterator;
@@ -1435,7 +1432,7 @@ namespace std
 		for (let it = first; !it.equals(last); )
 		{
 			if (std.equal_to(it.value, val) == true)
-				it = it.source().erase(it) as InputIterator;
+				it = _Erase(it) as InputIterator;
 			else
 			{
 				ret = it;
@@ -1475,7 +1472,7 @@ namespace std
 		for (let it = first; !it.equals(last);)
 		{
 			if (pred(it.value) == true)
-				it = it.source().erase(it) as InputIterator;
+				it = _Erase(it) as InputIterator;
 			else
 			{
 				ret = it;
@@ -1890,16 +1887,15 @@ namespace std
 	{
 		for (let it = first; !it.equals(last); it = it.next() as RandomAccessIterator)
 		{
-			let last_index: number = (last.index == -1) ? last.source().size() : last.index;
-			let rand_index: number = Math.floor(Math.random() * (last_index - first.index));
+			let last_index: number = (last.index() == -1)
+				? size(last.source() as Array<T>)
+				: last.index();
+			let rand_index: number = Math.floor(Math.random() * (last_index - first.index()));
 
 			it.swap(first.advance(rand_index));
 		}
 	}
-}
 
-namespace std
-{
 	/* =========================================================
 		SORTING
 			- SORT
@@ -1948,7 +1944,7 @@ namespace std
 	export function sort<T, RandomAccessIterator extends base.IArrayIterator<T>>
 		(first: RandomAccessIterator, last: RandomAccessIterator, compare: (left: T, right: T) => boolean = std.less): void
 	{
-		qsort(first.source() as base.IArrayContainer<T>, first.index, last.index - 1, compare);
+		qsort(first.source() as base.IArrayContainer<T>, first.index(), last.index() - 1, compare);
 	}
 
 	/**
@@ -2002,7 +1998,7 @@ namespace std
 			compare: (x: T, y: T) => boolean = std.less
 		): void
 	{
-		selection_sort(first.source() as base.IArrayContainer<T>, first.index, middle.index, last.index, compare);
+		selection_sort(first.source() as base.IArrayContainer<T>, first.index(), middle.index(), last.index(), compare);
 	}
 
 	/**
@@ -2373,10 +2369,7 @@ namespace std
 			}
 		}
 	}
-}
 
-namespace std
-{
 	/* =========================================================
 		HEAP
 	========================================================= */
@@ -2523,8 +2516,8 @@ namespace std
 		{
 			let container = last_item_it.source() as base.IArrayContainer<T>;
 
-			container.insert(less_it, last_item_it.value);
-			container.erase(last_item_it);
+			_Insert(less_it, last_item_it.value);
+			_Erase(last_item_it);
 		}
 	}
 
@@ -2586,8 +2579,8 @@ namespace std
 	{
 		let container = first.source() as base.IArrayContainer<T>;
 
-		container.insert(last, first.value);
-		container.erase(first);
+		_Insert(last, first.value);
+		_Erase(first);
 	}
 
 	/**
@@ -2758,10 +2751,7 @@ namespace std
 	{
 		std.sort(first, last, compare);
 	}
-}
 
-namespace std
-{
 	/* =========================================================
 		BINARY SEARCH
 	========================================================= */
@@ -3106,10 +3096,7 @@ namespace std
 
 		return !first.equals(last) && !compare(val, first.value);
 	}
-}
 
-namespace std
-{
 	/* =========================================================
 		PARTITION
 	========================================================= */
@@ -3315,10 +3302,7 @@ namespace std
 
 		return first;
 	}
-}
 
-namespace std
-{
 	/* =========================================================
 		MERGE & SET OPERATIONS
 			- MERGE
@@ -4030,10 +4014,7 @@ namespace std
 			}
 		}
 	}
-}
 
-namespace std
-{
 	/* =========================================================
 		MATHMATICS
 			- MIN & MAX
@@ -4564,6 +4545,112 @@ namespace std
 				std.reverse(first, last);
 				return false;
 			}
+		}
+	}
+
+	/* =========================================================
+		ELEMENTS I/O
+	========================================================= */
+	/**
+	 * @hidden
+	 */
+	function _Insert<T>(it: base.IArrayIterator<T>, val: T): base.IArrayIterator<T>
+	{
+		let source = it.source();
+		if (source instanceof Array)
+		{
+			if (it instanceof ArrayReverseIterator)
+			{
+				let d_it: ArrayIterator<T> = it.base().prev();
+				d_it = _Insert_by_val(d_it, val);
+
+				return new ArrayReverseIterator<T>(d_it.next());
+			}
+			else
+				return _Insert_by_val(it as ArrayIterator<T>, val);
+		}
+		else
+			return (source as base.IArrayContainer<T>).insert(it, val) as base.IArrayIterator<T>;
+	}
+
+	/**
+	 * @hidden
+	 */
+	function _Insert_by_val<T>(it: ArrayIterator<T>, val: T): ArrayIterator<T>
+	{
+		let source: Array<T> = it.source();
+		if (it.index() == -1)
+		{
+			source.push(val);
+			return begin(source);
+		}
+		else
+		{
+			let temp: Array<T> = source.splice(it.index());
+			source.push(val);
+			source.push(...temp);
+
+			return it;
+		}
+	}
+
+	/**
+	 * @hidden
+	 */
+	function _Erase<T>(_first: Iterator<T>, _last: Iterator<T> = _first.next()): Iterator<T>
+	{
+		if (_first.source() instanceof Array)
+		{
+			let source: Array<T> = _first.source() as Array<T>;
+			let first: ArrayIterator<T>;
+			let last: ArrayIterator<T>;
+			let is_reverse_iterator: boolean = false;
+
+			if (_first instanceof ArrayReverseIterator && _last instanceof ArrayReverseIterator)
+			{
+				is_reverse_iterator = true;
+				first = _last.base();
+				last = _first.base();
+			}
+			else
+			{
+				first = _first as ArrayIterator<T>;
+				last = _last as ArrayIterator<T>;
+			}
+
+			// ERASE ELEMENTS
+			first = _Erase_by_range(first, last);
+
+			// RETURN BRANCHES
+			if (is_reverse_iterator == true)
+				return new ArrayReverseIterator<T>(first.next());
+			else
+				return first;
+		}
+		else // TAKE THE RESPONSIBILITY TO ITS SOURCE CONTAINER
+			return (_first.source() as base.Container<T>).erase(_first, _last);
+	}
+
+	/**
+	 * @hidden
+	 */
+	function _Erase_by_range<T>(first: ArrayIterator<T>, last: ArrayIterator<T>): ArrayIterator<T>
+	{
+		if (first.index() == -1)
+			return first;
+
+		let source: Array<T> = first.source();
+
+		// ERASE ELEMENTS
+		if (last.index() == -1)
+		{
+			source.splice(first.index());
+			return end(source);
+		}
+		else
+		{
+			source.splice(first.index(), distance(first, last));
+			return first;
 		}
 	}
 }

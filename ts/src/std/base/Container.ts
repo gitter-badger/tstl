@@ -252,7 +252,7 @@ namespace std.base
 	}
 
 	export interface IReverseIterator<T>
-		extends ReverseIterator<T, Iterator<T>, IReverseIterator<T>>
+		extends ReverseIterator<T, base.Container<T>, Iterator<T>, IReverseIterator<T>>
 	{
 	}
 }

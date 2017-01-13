@@ -915,12 +915,17 @@ namespace std
 		/* ---------------------------------------------------------------
 			ACCESSORS
 		--------------------------------------------------------------- */
+		public source(): List<T>
+		{
+			return this.source_ as List<T>;
+		}
+
 		/**
 		 * @inheritdoc
 		 */
 		public prev(): ListIterator<T>
 		{
-			return this["prev_"] as ListIterator<T>;
+			return this.prev_ as ListIterator<T>;
 		}
 
 		/**
@@ -928,7 +933,7 @@ namespace std
 		 */
 		public next(): ListIterator<T>
 		{
-			return this["next_"] as ListIterator<T>;
+			return this.next_ as ListIterator<T>;
 		}
 
 		 /**
@@ -992,7 +997,7 @@ namespace std
 	 * @author Jeongho Nam <http://samchon.org>
 	 */
 	export class ListReverseIterator<T>
-		extends ReverseIterator<T, ListIterator<T>, ListReverseIterator<T>>
+		extends ReverseIterator<T, List<T>, ListIterator<T>, ListReverseIterator<T>>
 		implements base.ILinearIterator<T>
 	{
 		/* ---------------------------------------------------------------

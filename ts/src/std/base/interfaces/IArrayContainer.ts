@@ -120,7 +120,7 @@
 		 *
 		 * @return Sequence number of the iterator in the source {@link IArrayContainer array}.
 		 */
-		index: number;
+		index(): number;
 
 		/**
 		 * @inheritdoc

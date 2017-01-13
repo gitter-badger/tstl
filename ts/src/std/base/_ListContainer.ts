@@ -485,12 +485,12 @@ namespace std.base
 		/**
 		 * @hidden
 		 */
-		private prev_: _ListIteratorBase<T>;
+		protected prev_: _ListIteratorBase<T>;
 
 		/**
 		 * @hidden
 		 */
-		private next_: _ListIteratorBase<T>;
+		protected next_: _ListIteratorBase<T>;
 
 		/**
 		 * @hidden
@@ -546,7 +546,7 @@ namespace std.base
 				{
 					it = it.next();
 
-					if (it.equals(this.source_.end() as _ListIteratorBase<T>))
+					if (it.equals((this.source_ as _ListContainer<T, _ListIteratorBase<T>>).end() as _ListIteratorBase<T>))
 						return it;
 				}
 			}
@@ -556,7 +556,7 @@ namespace std.base
 				{
 					it = it.prev();
 
-					if (it.equals(this.source_.end() as _ListIteratorBase<T>))
+					if (it.equals((this.source_ as _ListContainer<T, _ListIteratorBase<T>>).end() as _ListIteratorBase<T>))
 						return it;
 				}
 			}

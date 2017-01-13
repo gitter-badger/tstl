@@ -6,7 +6,7 @@ namespace std.example
 	{
 		console.log("Test Reverse Iterator");
 		let vec: Vector<number> = new Vector<number>([0, 1, 2, 3, 4]);
-		let list: List<number> = new List(vec.begin(), vec.end());
+		let list: List<number> = new List<number>(vec.begin(), vec.end());
 		let deque: Deque<number> = new Deque<number>(vec.begin(), vec.end());
 
 		let set: HashSet<number> = new HashSet<number>(vec.begin(), vec.end());
@@ -18,7 +18,7 @@ namespace std.example
 		reverse_iterate(vec);
 
 		console.log("List's Reverse Iterator");
-		reverse_iterate(list);
+		reverse_iterate<number>(list);
 
 		console.log("Deque's Reverse Iterator");
 		reverse_iterate(deque);
