@@ -9,7 +9,6 @@ handbook/
 *.lnk
 
 # OUTPUT
-*.js
-*.js.map
-./index.d.ts
-./filesystem.d.ts
+./*.d.ts
+./*.js
+./*.js.map
