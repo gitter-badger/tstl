@@ -1,9 +1,15 @@
 # ======================================================
 #	CUSTOM IGNORE
 # ======================================================
-api/
+# BASIC
+.vscopde/
+handbook/
 
-index.js
-filesystem.js
-index.d.ts
-filesystem.d.ts
+*.bat
+*.lnk
+
+# OUTPUT
+*.js
+*.js.map
+./index.d.ts
+./filesystem.d.ts

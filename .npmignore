@@ -2,11 +2,15 @@
 #	TYPESCRIPT
 # ======================================================
 .git
-api\
+.vscode
+
+build\
 design\
+handbook\
 ts\
 
-build.js
 *.bat
 *.log
 *.*ignore
+
+*.js.map
