@@ -1,3 +1,4 @@
+/// <reference path="index.d.ts" />
 /**
  * @author Jeongho Nam <http://samchon.org>
  */

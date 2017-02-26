@@ -1,4 +1,4 @@
-const fs = require("fs");
+ const fs = require("fs");
 const os = require("os");
 const process = require('child_process');
 
@@ -15,5 +15,8 @@ if (fs.existsSync(RELEASE_DIR))
 	else
 		process.execSync("rm -rf " + RELEASE_DIR);
 
-var command = "typedoc --tsconfig ../ts/std/tsconfig.json --target ES5 --mode file --out " + RELEASE_DIR;
+// CALL THE TYPEDOC COMMAND
+var command = "typedoc ../index.d.ts ../filesystem.d.ts --includeDeclarations --target ES6 --mode file --out " + RELEASE_DIR;
+//var command = "typedoc --tsconfig ../src/std/tsconfig.json --target ES5 --mode file --out " + RELEASE_DIR;
+
 process.execSync(command);
