@@ -1,4 +1,6 @@
-﻿namespace std.filesystem
+﻿/// <reference path="API.ts" />
+
+namespace std.filesystem
 {
 	export function equivalent(x: string, y: string): Promise<boolean>
 	{
