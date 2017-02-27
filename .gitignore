@@ -11,10 +11,6 @@ dist/
 *.lnk
 
 # OUTPUT
-./index.d.ts
-./index.js
-./index.js.map
-
-./filesystem.d.ts
-./filesystem.js
-./filesystem.js.map
+/*.d.ts
+/*.js
+/*.js.map
