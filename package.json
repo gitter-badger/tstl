@@ -29,41 +29,18 @@
     }
   ],
   "keywords": [
-    "stl",
-    "standard template library",
-    "typescript",
-    "standard",
-    "template",
-    "container",
-    "library",
-    "algorithm",
-    "iterator",
-    "functional",
-    "utility",
-    "vector",
-    "deque",
-    "list",
-    "stack",
-    "queue",
-    "priority_queue",
-    "set",
-    "multiset",
-    "unordered_set",
-    "unordered_multiset",
-    "map",
-    "multimap",
-    "unordered_map",
-    "unordered_multimap",
-    "IComparable",
-    "Pair",
+    "stl", "standard template library",
+    "typescript", "standard", "template", "container",
+
+    "library", "algorithm", "iterator", "functional", "utility",
+    
+    "vector", "deque", "list", "stack", "queue", "priority_queue",
+    "set", "multiset", "unordered_set", "unordered_multiset",
+    "map", "multimap", "unordered_map", "unordered_multimap",
+    
+    "IComparable", "Pair",
     "PriorityQueue",
-    "TreeSet",
-    "TreeMultiSet",
-    "HashSet",
-    "HashMultiSet",
-    "TreeMap",
-    "TreeMultiMap",
-    "HashMap",
-    "HashMultiMap"
+    "TreeSet", "TreeMultiSet", "HashSet", "HashMultiSet",
+    "TreeMap", "TreeMultiMap", "HashMap", "HashMultiMap"
   ]
 }

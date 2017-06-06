@@ -16,7 +16,11 @@ if (fs.existsSync(RELEASE_DIR))
 		process.execSync("rm -rf " + RELEASE_DIR);
 
 // CALL THE TYPEDOC COMMAND
+// var command = 
+// 	"typedoc --tsconfig ../src/std/tsconfig.json " +
+// 	"--out " + RELEASE_DIR + 
+// 	" --mode file " + 
+// 	"--includeDeclarations --excludeExternals --externalPattern \"**/node*\"";
 var command = "typedoc ../index.d.ts ../filesystem.d.ts --includeDeclarations --target ES6 --mode file --out " + RELEASE_DIR;
-//var command = "typedoc --tsconfig ../src/std/tsconfig.json --target ES5 --mode file --out " + RELEASE_DIR;
 
 process.execSync(command);
