@@ -14,7 +14,7 @@
 			// TypeScript
 			"sourceMaps": true,
 			"outFiles": [
-				"${workspaceRoot}/lib/*.js",
+				"${workspaceRoot}/*.js",
 				"${workspaceRoot}/src/test/*.js"
 			]
 		},
