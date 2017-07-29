@@ -1,19 +1,11 @@
 /// <reference path="../API.ts" />
 
+/// <reference path="../base/threads/MutexBase.ts" />
+
 namespace std
 {
-	export class Mutex implements ILockable
+	export class Mutex extends base.MutexBase<void, List<base.IResolver>>
 	{
-		/**
-		 * @hidden
-		 */
-		private lock_count_: number;
-
-		/**
-		 * @hidden
-		 */
-		private listeners_: Queue<IListener>;
-
 		/* ---------------------------------------------------------
 			CONSTRUCTORS
 		--------------------------------------------------------- */
@@ -22,56 +14,12 @@ namespace std
 		 */
 		public constructor()
 		{
-			this.lock_count_ = 0;
-			this.listeners_ = new Queue<IListener>();
+			super(new List<base.IResolver>());
 		}
 
-		/* ---------------------------------------------------------
-			LOCK & UNLOCK
-		--------------------------------------------------------- */
-		public lock(): Promise<void>
+		protected _Resolve(resolve: base.IResolver<void>): void
 		{
-			return new Promise<void>(resolve =>
-			{
-				if (this.lock_count_++ == 0)
-					resolve();
-				else
-					this.listeners_.push(resolve);
-			});
+			resolve();
 		}
-
-		/**
-		 * Lock mutex if not locked.
-		 * 
-		 * Attempts to lock the {@link Mutex}, without blocking:
-		 */
-		public try_lock(): boolean
-		{
-			if (this.lock_count_ != 0)
-				return false; // HAVE LOCKED
-			
-			++this.lock_count_;
-			return true;			
-		}
-
-		public unlock(): void
-		{
-			if (this.lock_count_ == 0)
-				throw new RangeError("This mutex is free.");
-
-			--this.lock_count_; // DECREASE LOCKED COUNT
-			if (this.listeners_.empty() == false)
-			{
-				let fn: IListener = this.listeners_.front();
-				
-				this.listeners_.pop(); // POP FIRST
-				fn(); // AND CALL LATER
-			}
-		}
-	}
-
-	interface IListener
-	{
-		(): void;
 	}
 }

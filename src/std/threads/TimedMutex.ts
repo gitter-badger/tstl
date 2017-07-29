@@ -1,19 +1,11 @@
 /// <reference path="../API.ts" />
 
+/// <reference path="../base/threads/MutexBase.ts" />
+
 namespace std
 {
-	export class TimedMutex implements ILockable
+	export class TimedMutex extends base.MutexBase<boolean, HashSet<base.IResolver<boolean>>>
 	{
-		/**
-		 * @hidden
-		 */
-		private lock_count_: number;
-
-		/**
-		 * @hidden
-		 */
-		private listeners_: HashSet<IListener>;
-
 		/* ---------------------------------------------------------
 			CONSTRUCTORS
 		--------------------------------------------------------- */
@@ -22,51 +14,12 @@ namespace std
 		 */
 		public constructor()
 		{
-			this.lock_count_ = 0;
-			this.listeners_ = new HashSet<IListener>();
+			super(new HashSet<base.IResolver<boolean>>());
 		}
 
-		/* ---------------------------------------------------------
-			LOCK & UNLOCK
-		--------------------------------------------------------- */
-		public lock(): Promise<void>
+		protected _Resolve(listener: base.IResolver<boolean>): void
 		{
-			return new Promise<void>(resolve =>
-			{
-				if (this.lock_count_++ == 0)
-					resolve();
-				else
-					this.listeners_.insert(resolve);
-			});
-		}
-
-		/**
-		 * Lock mutex if not locked.
-		 * 
-		 * Attempts to lock the {@link Mutex}, without blocking:
-		 */
-		public try_lock(): boolean
-		{
-			if (this.lock_count_ != 0)
-				return false; // HAVE LOCKED
-			
-			++this.lock_count_;
-			return true;			
-		}
-
-		public unlock(): void
-		{
-			if (this.lock_count_ == 0)
-				throw new RangeError("This mutex is free.");
-
-			--this.lock_count_; // DECREASE LOCKED COUNT
-			if (this.listeners_.empty() == false)
-			{
-				let fn: IListener = this.listeners_.begin().value;
-				
-				this.listeners_.erase(this.listeners_.begin()); // POP FIRST
-				fn(); // AND CALL LATER
-			}
+			listener(true);
 		}
 
 		/* ---------------------------------------------------------
@@ -76,26 +29,24 @@ namespace std
 		{
 			return new Promise<boolean>(resolve =>
 			{
-				if (this.lock_count_++ == 0)
-					resolve(true);
-				else
+				if (this._Lock(resolve) == true)
+					return;
+
+				// DO LOCK
+				this.listeners_.insert(resolve);
+
+				// AUTOMATIC UNLOCK
+				sleep_for(ms).then(() =>
 				{
-					// DO LOCK
-					this.listeners_.insert(resolve);
+					if (this.listeners_.has(resolve) == false)
+						return; // HAVE OR HAD LOCKED
 
-					// AUTOMATIC UNLOCK
-					sleep_for(ms).then(() =>
-					{
-						if (this.listeners_.has(resolve) == false)
-							return;
+					// NOT LOCKED YET - RELEASE
+					this.listeners_.erase(resolve); // POP THE LISTENER
+					--this.lock_count_; // DECREASE THE LOCKED COUNT
 
-						// DO UNLOCK
-						this.listeners_.erase(resolve); // POP THE LISTENER
-						--this.lock_count_; // DECREASE LOCKED COUNT
-
-						resolve(false); // RETURN FAILURE
-					});
-				}
+					resolve(false); // RETURN FAILURE
+				});
 			});
 		}
 		
@@ -106,10 +57,5 @@ namespace std
 
 			return this.try_lock_for(ms);
 		}
-	}
-
-	interface IListener
-	{
-		(): void | boolean;
 	}
 }
