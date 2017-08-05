@@ -10,56 +10,6 @@ namespace std.TreeMultiSet
 
 namespace std
 {
-	/**
-	 * Tree-structured multiple-key set.
-	 *
-	 * {@link TreeMultiSet TreeMultiSets} are containers that store elements following a specific order, and 
-	 * where multiple elements can have equivalent values.
-	 *
-	 * In a {@link TreeMultiSet}, the value of an element also identifies it (the value is itself 
-	 * the <i>key</i>, of type <i>T</i>). The value of the elements in a {@link TreeMultiSet} cannot 
-	 * be modified once in the container (the elements are always const), but they can be inserted or removed 
-	 * from the container.
-	 *
-	 * Internally, the elements in a {@link TreeMultiSet TreeMultiSets} are always sorted following a strict 
-	 * weak ordering criterion indicated by its internal comparison method (of {@link IComparable.less less}).
-	 *
-	 * {@link TreeMultiSet} containers are generally slower than {@link HashMultiSet} containers 
-	 * to access individual elements by their <i>key</i>, but they allow the direct iteration on subsets based on 
-	 * their order.
-	 *
-	 * {@link TreeMultiSet TreeMultiSets} are typically implemented as binary search trees.
-	 * 
-	 * <a href="http://samchon.github.io/tstl/images/design/class_diagram/set_containers.png" target="_blank"> 
-	 * <img src="http://samchon.github.io/tstl/images/design/class_diagram/set_containers.png" style="max-width: 100%" /> </a></p>
-	 * 
-	 * ### Container properties
-	 * <dl>
-	 *	<dt> Associative </dt>
-	 *	<dd> 
-	 *		Elements in associative containers are referenced by their <i>key</i> and not by their absolute 
-	 *		position in the container.
-	 *	</dd>
-	 * 
-	 *	<dt> Ordered </dt>
-	 *	<dd> 
-	 *		The elements in the container follow a strict order at all times. All inserted elements are 
-	 *		given a position in this order. 
-	 *	</dd>
-	 *
-	 *	<dt> Set </dt>
-	 *	<dd> The value of an element is also the <i>key</i> used to identify it. </dd>
-	 *
-	 *	<dt> Multiple equivalent keys </dt>
-	 *	<dd> Multiple elements in the container can have equivalent <i>keys</i>. </dd>
-	 * </dl>
-	 * 
-	 * @param <T> Type of the elements. Each element in a {@link TreeMultiSet} container is also identified 
-	 *			  by this value (each value is itself also the element's <i>key</i>).
-	 *
-	 * @reference http://www.cplusplus.com/reference/set/multiset
-	 * @author Jeongho Nam <http://samchon.org>
-	 */
 	export class TreeMultiSet<T>
 		extends base.MultiSet<T>
 		implements base.ITreeSet<T>
@@ -76,61 +26,20 @@ namespace std
 		============================================================
 			CONSTURCTORS
 		--------------------------------------------------------- */
-		/**
-		 * Default Constructor.
-		 */
 		public constructor();
 
-		/**
-		 * Construct from compare.
-		 * 
-		 * @param compare A binary predicate determines order of elements.
-		 */
 		public constructor(compare: (x: T, y: T) => boolean);
 
-		/**
-		 * Contruct from elements.
-		 *
-		 * @param array Elements to be contained.
-		 */
 		public constructor(array: Array<T>);
 
-		/**
-		 * Contruct from elements with compare.
-		 *
-		 * @param array Elements to be contained.
-		 * @param compare A binary predicate determines order of elements.
-		 */
 		public constructor(array: Array<T>, compare: (x: T, y: T) => boolean);
 
-		/**
-		 * Copy Constructor.
-		 */
 		public constructor(container: TreeMultiSet<T>);
 
-		/**
-		 * Copy Constructor with compare.
-		 * 
-		 * @param container A container to be copied.
-		 * @param compare A binary predicate determines order of elements.
-		 */
 		public constructor(container: TreeMultiSet<T>, compare: (x: T, y: T) => boolean);
 
-		/**
-		 * Range Constructor.
-		 *
-		 * @param begin Input interator of the initial position in a sequence.
-		 * @param end Input interator of the final position in a sequence.
-		 */
 		public constructor(begin: base.Iterator<T>, end: base.Iterator<T>);
 
-		/**
-		 * Construct from range and compare.
-		 * 
-		 * @param begin Input interator of the initial position in a sequence.
-		 * @param end Input interator of the final position in a sequence.
-		 * @param compare A binary predicate determines order of elements.
-		 */
 		public constructor(begin: base.Iterator<T>, end: base.Iterator<T>, compare: (x: T, y: T) => boolean);
 
 		public constructor(...args: any[])
@@ -188,9 +97,6 @@ namespace std
 		/* ---------------------------------------------------------
 			ASSIGN & CLEAR
 		--------------------------------------------------------- */
-		/**
-		 * @inheritdoc
-		 */
 		public clear(): void
 		{
 			super.clear();
@@ -201,9 +107,6 @@ namespace std
 		/* =========================================================
 			ACCESSORS
 		========================================================= */
-		/**
-		 * @inheritdoc
-		 */
 		public find(val: T): SetIterator<T>
 		{
 			let node = this.tree_.find_by_val(val);
@@ -214,9 +117,6 @@ namespace std
 				return node.value;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public count(val: T): number
 		{
 			let it = this.find(val);
@@ -228,41 +128,26 @@ namespace std
 			return cnt;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public key_comp(): (x: T, y: T) => boolean
 		{
 			return this.tree_.key_comp();
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public value_comp(): (x: T, y: T) => boolean
 		{
 			return this.tree_.key_comp();
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public lower_bound(val: T): SetIterator<T>
 		{
 			return this.tree_.lower_bound(val);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public upper_bound(val: T): SetIterator<T>
 		{
 			return this.tree_.upper_bound(val);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public equal_range(val: T): Pair<SetIterator<T>, SetIterator<T>>
 		{
 			return this.tree_.equal_range(val);
@@ -362,28 +247,8 @@ namespace std
 		/* ---------------------------------------------------------
 			SWAP
 		--------------------------------------------------------- */
-		/**
-		 * Swap content.
-		 * 
-		 * Exchanges the content of the container by the content of <i>obj</i>, which is another 
-		 * {@link TreeMultiSet set} of the same type. Sizes abd container type may differ.
-		 * 
-		 * After the call to this member function, the elements in this container are those which were 
-		 * in <i>obj</i> before the call, and the elements of <i>obj</i> are those which were in this. All 
-		 * iterators, references and pointers remain valid for the swapped objects.
-		 *
-		 * Notice that a non-member function exists with the same name, {@link swap swap}, overloading that 
-		 * algorithm with an optimization that behaves like this member function.
-		 * 
-		 * @param obj Another {@link TreeMultiSet set container} of the same type of elements as this (i.e.,
-		 *			  with the same template parameters, <b>Key</b> and <b>T</b>) whose content is swapped 
-		 *			  with that of this {@link TreeMultiSet container}.
-		 */
 		public swap(obj: TreeMultiSet<T>): void;
 
-		/**
-		 * @inheritdoc
-		 */
 		public swap(obj: base.Container<T>): void;
 
 		public swap(obj: TreeMultiSet<T> | base.Container<T>): void

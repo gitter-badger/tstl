@@ -26,14 +26,6 @@ namespace std.base
 		 */
 		protected value_: T;
 
-		/**
-		 * Initializer Constructor.
-		 * 
-		 * @param source The source {@link Container} to reference.
-		 * @param prev A refenrece of previous node ({@link ListIterator iterator}).
-		 * @param next A refenrece of next node ({@link ListIterator iterator}).
-		 * @param value Value to be stored in the node (iterator).
-		 */
 		protected constructor(source: Container<T>, prev: _ListIteratorBase<T>, next: _ListIteratorBase<T>, value: T)
 		{
 			super(source);
@@ -46,25 +38,16 @@ namespace std.base
 		/* ---------------------------------------------------------------
 			ACCESSORS
 		--------------------------------------------------------------- */
-		/**
-		 * @inheritdoc
-		 */
 		public prev(): _ListIteratorBase<T>
 		{
 			return this.prev_;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public next(): _ListIteratorBase<T>
 		{
 			return this.next_;
 		}
 
-		 /**
-		  * @inheritdoc
-		  */
 		public advance(step: number): _ListIteratorBase<T>
 		{
 			let it: _ListIteratorBase<T> = this;
@@ -93,9 +76,6 @@ namespace std.base
 			return it;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public get value(): T
 		{
 			return this.value_;
@@ -104,17 +84,11 @@ namespace std.base
 		/* ---------------------------------------------------------------
 			COMPARISON
 		--------------------------------------------------------------- */
-		/**
-		 * @inheritdoc
-		 */
 		public equals(obj: _ListIteratorBase<T>): boolean
 		{
 			return this == obj;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public swap(obj: _ListIteratorBase<T>): void
 		{
 			let source: _ListContainer<T, _ListIteratorBase<T>> = this.source_ as _ListContainer<T, _ListIteratorBase<T>>;

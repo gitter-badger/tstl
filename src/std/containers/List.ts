@@ -10,47 +10,6 @@ namespace std.List
 
 namespace std
 {
-	/**
-	 * Doubly linked list.
-	 *
-	 * {@link List}s are sequence containers that allow constant time insert and erase operations anywhere within the 
-	 * sequence, and iteration in both directions.
-	 *
-	 * List containers are implemented as doubly-linked lists; Doubly linked lists can store each of the elements they 
-	 * contain in different and unrelated storage locations. The ordering is kept internally by the association to each 
-	 * element of a link to the element preceding it and a link to the element following it.
-	 * 
-	 * Compared to other base standard sequence containers (array, vector and deque), lists perform generally better 
-	 * in inserting, extracting and moving elements in any position within the container for which an iterator has already 
-	 * been obtained, and therefore also in algorithms that make intensive use of these, like sorting algorithms.
-	 *
-	 * The main drawback of lists and forward_lists compared to these other sequence containers is that they lack 
-	 * direct access to the elements by their position; For example, to access the sixth element in a list, one has to 
-	 * iterate from a known position (like the beginning or the end) to that position, which takes linear time in the 
-	 * distance between these. They also consume some extra memory to keep the linking information associated to each 
-	 * element (which may be an important factor for large lists of small-sized elements).
-	 *
-	 * <a href="http://samchon.github.io/tstl/images/design/class_diagram/linear_containers.png" target="_blank"> 
-	 * <img src="http://samchon.github.io/tstl/images/design/class_diagram/linear_containers.png" style="max-width: 100%" /></a>
-	 *
-	 * 
-	 * ### Container properties
-	 * <dl>
-	 * 	<dt> Sequence </dt>
-	 * 	<dd> Elements in sequence containers are ordered in a strict linear sequence. Individual elements are accessed by 
-	 *		 their position in this sequence. </dd>
-	 *
-	 * 	<dt> Doubly-linked list </dt>
-	 *	<dd> Each element keeps information on how to locate the next and the previous elements, allowing constant time 
-	 *		 insert and erase operations before or after a specific element (even of entire ranges), but no direct random 
-	 *		 access. </dd>
-	 * </dl>
-	 *
-	 * @param <T> Type of the elements.
-	 *
-	 * @reference http://www.cplusplus.com/reference/list/list/
-	 * @author Jeongho Nam <http://samchon.org>
-	 */
 	export class List<T>
 		extends base._ListContainer<T, ListIterator<T>>
 		implements base.IDequeContainer<T>
@@ -64,52 +23,14 @@ namespace std
 		============================================================
 			CONSTURCTORS
 		--------------------------------------------------------- */
-		/**
-		 * Default Constructor.
-		 *
-		 * Constructs an empty container, with no elements.
-		 */
 		public constructor();
 
-		/**
-		 * Initializer list Constructor.
-		 *
-		 * Constructs a container with a copy of each of the elements in <i>array</i>, in the same order.
-		 *
-		 * @param array An array containing elements to be copied and contained.
-		 */
 		public constructor(items: Array<T>);
 
-		/**
-		 * Fill Constructor.
-		 *
-		 * Constructs a container with <i>n</i> elements. Each element is a copy of <i>val</i> (if provided).
-		 *
-		 * @param n Initial container size (i.e., the number of elements in the container at construction).
-		 * @param val Value to fill the container with. Each of the <i>n</i> elements in the container is 
-		 *			  initialized to a copy of this value.
-		 */
 		public constructor(size: number, val: T);
 
-		/**
-		 * Copy Constructor.
-		 *
-		 * Constructs a container with a copy of each of the elements in <i>container</i>, in the same order.
-		 *
-		 * @param container Another container object of the same type (with the same class template 
-		 *					arguments <i>T</i>), whose contents are either copied or acquired.
-		 */
 		public constructor(container: List<T>);
 
-		/**
-		 * Range Constructor.
-		 *
-		 * Constructs a container with as many elements as the range (<i>begin</i>, <i>end<i>), with each 
-		 * element emplace-constructed from its corresponding element in that range, in the same order.
-		 *
-		 * @param begin Input interator of the initial position in a sequence.
-		 * @param end Input interator of the final position in a sequence.
-		 */
 		public constructor(begin: base.Iterator<T>, end: base.Iterator<T>);
 
 		public constructor(...args: any[])
@@ -169,14 +90,8 @@ namespace std
 		/* ---------------------------------------------------------
 			ASSIGN & CLEAR
 		--------------------------------------------------------- */
-		/**
-		 * @inheritdoc
-		 */
 		public assign(n: number, val: T): void;
 
-		/**
-		 * @inheritdoc
-		 */
 		public assign<U extends T, InputIterator extends base.Iterator<U>>
 			(begin: InputIterator, end: InputIterator): void;
 
@@ -190,17 +105,11 @@ namespace std
 		/* =========================================================
 			ACCESSORS
 		========================================================= */
-		/**
-		 * @inheritdoc
-		 */
 		public rbegin(): ListReverseIterator<T>
 		{
 			return new ListReverseIterator<T>(this.end());
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public rend(): ListReverseIterator<T>
 		{
 			return this.rend_;
@@ -214,123 +123,17 @@ namespace std
 		============================================================
 			INSERT
 		--------------------------------------------------------- */
-		/**
-		 * Insert an element.
-		 *
-		 * The container is extended by inserting a new element before the element at the specified 
-		 * <i>position</i>. This effectively increases the {@link List.size List size} by the amount of elements 
-		 * inserted.
-		 *
-		 * Unlike other standard sequence containers, {@link List} is specifically designed to be efficient 
-		 * inserting and removing elements in any position, even in the middle of the sequence.
-		 *
-		 * @param position Position in the container where the new element is inserted.
-		 *				   {@link iterator}> is a member type, defined as a 
-		 *				   {@link ListIterator bidirectional iterator} type that points to elements.
-		 * @param val Value to be inserted as an element.
-		 *
-		 * @return An iterator that points to the newly inserted element; <i>val</i>.
-		 */
 		public insert(position: ListIterator<T>, val: T): ListIterator<T>;
 
-		/**
-		 * Insert elements by repeated filling. 
-		 * 
-		 * The container is extended by inserting a new element before the element at the specified
-		 * <i>position</i>. This effectively increases the {@link List.size List size} by the amount of elements
-		 * inserted.
-		 *
-		 * Unlike other standard sequence containers, {@link List} is specifically designed to be efficient
-		 * inserting and removing elements in any position, even in the middle of the sequence.
-		 *
-		 * @param position Position in the container where the new elements are inserted. The {@link iterator} is a 
-		 *				   member type, defined as a {@link ListIterator bidirectional iterator} type that points to 
-		 *				   elements.
-		 * @param size Number of elements to insert.
-		 * @param val Value to be inserted as an element.
-		 *
-		 * @return An iterator that points to the first of the newly inserted elements.
-		 */
 		public insert(position: ListIterator<T>, size: number, val: T): ListIterator<T>;
 
-		/**
-		 * Insert elements by range iterators.
-		 * 
-		 * The container is extended by inserting a new element before the element at the specified
-		 * <i>position</i>. This effectively increases the {@link List.size List size} by the amount of elements
-		 * inserted.
-		 *
-		 * Unlike other standard sequence containers, {@link List} is specifically designed to be efficient
-		 * inserting and removing elements in any position, even in the middle of the sequence.
-		 * 
-		 * @param position Position in the container where the new elements are inserted. The {@link iterator} is a 
-		 *				   member type, defined as a {@link ListIterator bidirectional iterator} type that points to 
-		 *				   elements.
-		 * @param begin An iterator specifying range of the begining element.
-		 * @param end An iterator specifying range of the ending element.
-		 *
-		 * @return An iterator that points to the first of the newly inserted elements.
-		 */
 		public insert<U extends T, InputIterator extends base.Iterator<U>>
 			(position: ListIterator<T>, begin: InputIterator, end: InputIterator): ListIterator<T>;
 		
-		/**
-		 * Insert an element.
-		 *
-		 * The container is extended by inserting a new element before the element at the specified 
-		 * <i>position</i>. This effectively increases the {@link List.size List size} by the amount of elements 
-		 * inserted.
-		 *
-		 * Unlike other standard sequence containers, {@link List} is specifically designed to be efficient 
-		 * inserting and removing elements in any position, even in the middle of the sequence.
-		 *
-		 * @param position Position in the container where the new element is inserted.
-		 *				   {@link iterator}> is a member type, defined as a 
-		 *				   {@link ListReverseIterator bidirectional iterator} type that points to elements.
-		 * @param val Value to be inserted as an element.
-		 *
-		 * @return An iterator that points to the newly inserted element; <i>val</i>.
-		 */
 		public insert(position: ListReverseIterator<T>, val: T): ListReverseIterator<T>;
 
-		/**
-		 * Insert elements by repeated filling. 
-		 * 
-		 * The container is extended by inserting a new element before the element at the specified
-		 * <i>position</i>. This effectively increases the {@link List.size List size} by the amount of elements
-		 * inserted.
-		 *
-		 * Unlike other standard sequence containers, {@link List} is specifically designed to be efficient
-		 * inserting and removing elements in any position, even in the middle of the sequence.
-		 *
-		 * @param position Position in the container where the new elements are inserted. The {@link iterator} is a 
-		 *				   member type, defined as a {@link ListReverseIterator bidirectional iterator} type that points to
-		 *				   elements.
-		 * @param size Number of elements to insert.
-		 * @param val Value to be inserted as an element.
-		 *
-		 * @return An iterator that points to the first of the newly inserted elements.
-		 */
 		public insert(position: ListReverseIterator<T>, size: number, val: T): ListReverseIterator<T>;
 
-		/**
-		 * Insert elements by range iterators.
-		 * 
-		 * The container is extended by inserting a new element before the element at the specified
-		 * <i>position</i>. This effectively increases the {@link List.size List size} by the amount of elements
-		 * inserted.
-		 *
-		 * Unlike other standard sequence containers, {@link List} is specifically designed to be efficient
-		 * inserting and removing elements in any position, even in the middle of the sequence.
-		 * 
-		 * @param position Position in the container where the new elements are inserted. The {@link iterator} is a 
-		 *				   member type, defined as a {@link ListReverseIterator bidirectional iterator} type that points to
-		 *				   elements.
-		 * @param begin An iterator specifying range of the begining element.
-		 * @param end An iterator specifying range of the ending element.
-		 *
-		 * @return An iterator that points to the first of the newly inserted elements.
-		 */
 		public insert<U extends T, InputIterator extends base.Iterator<U>>
 			(position: ListReverseIterator<T>, begin: InputIterator, end: InputIterator): ListReverseIterator<T>;
 
@@ -361,74 +164,12 @@ namespace std
 		/* ---------------------------------------------------------
 			ERASE
 		--------------------------------------------------------- */
-		/**
-		 * Erase an element.
-		 *
-		 * Removes from the {@link List} either a single element; <i>position</i>.
-		 *
-		 * This effectively reduces the container size by the number of element removed.
-		 *
-		 * Unlike other standard sequence containers, {@link List} objects are specifically designed to be 
-		 * efficient inserting and removing elements in any position, even in the middle of the sequence.
-		 * 
-		 * @param position base.Iterator pointing to a single element to be removed from the {@link List}.
-		 *
-		 * @return An iterator pointing to the element that followed the last element erased by the function call. 
-		 *		   This is the {@link end end()} if the operation erased the last element in the sequence.
-		 */
 		public erase(position: ListIterator<T>): ListIterator<T>;
 		
-		/**
-		 * Erase elements.
-		 *
-		 * Removes from the {@link List} container a range of elements.
-		 *
-		 * This effectively reduces the container {@link size} by the number of elements removed.
-		 *
-		 * Unlike other standard sequence containers, {@link List} objects are specifically designed to be 
-		 * efficient inserting and removing elements in any position, even in the middle of the sequence.
-		 *
-		 * @param begin An iterator specifying a range of beginning to erase.
-		 * @param end An iterator specifying a range of end to erase.
-		 * 
-		 * @return An iterator pointing to the element that followed the last element erased by the function call. 
-		 *		   This is the {@link end end()} if the operation erased the last element in the sequence.
-		 */
 		public erase(begin: ListIterator<T>, end: ListIterator<T>): ListIterator<T>;
 
-		/**
-		 * Erase an element.
-		 *
-		 * Removes from the {@link List} either a single element; <i>position</i>.
-		 *
-		 * This effectively reduces the container size by the number of element removed.
-		 *
-		 * Unlike other standard sequence containers, {@link List} objects are specifically designed to be 
-		 * efficient inserting and removing elements in any position, even in the middle of the sequence.
-		 * 
-		 * @param position base.Iterator pointing to a single element to be removed from the {@link List}.
-		 *
-		 * @return An iterator pointing to the element that followed the last element erased by the function call. 
-		 *		   This is the {@link rend rend()} if the operation erased the last element in the sequence.
-		 */
 		public erase(position: ListReverseIterator<T>): ListReverseIterator<T>;
 
-		/**
-		 * Erase elements.
-		 *
-		 * Removes from the {@link List} container a range of elements.
-		 *
-		 * This effectively reduces the container {@link size} by the number of elements removed.
-		 *
-		 * Unlike other standard sequence containers, {@link List} objects are specifically designed to be 
-		 * efficient inserting and removing elements in any position, even in the middle of the sequence.
-		 *
-		 * @param begin An iterator specifying a range of beginning to erase.
-		 * @param end An iterator specifying a range of end to erase.
-		 * 
-		 * @return An iterator pointing to the element that followed the last element erased by the function call. 
-		 *		   This is the {@link rend rend()} if the operation erased the last element in the sequence.
-		 */
 		public erase(begin: ListReverseIterator<T>, end: ListReverseIterator<T>): ListReverseIterator<T>;
 
 		public erase(first: any, last: any = first.next()): ListIterator<T> | ListReverseIterator<T>
@@ -467,35 +208,8 @@ namespace std
 		==================================================================
 			UNIQUE & REMOVE (IF)
 		--------------------------------------------------------------- */
-		/**
-		 * Remove duplicate values.
-		 *
-		 * Removes all but the first element from every consecutive group of equal elements in the 
-		 *
-		 * Notice that an element is only removed from the {@link List} container if it compares equal to the 
-		 * element immediately preceding it. Thus, this function is especially useful for sorted lists.
-		 */
 		public unique(): void;
 
-		/**
-		 * Remove duplicate values.
-		 * 
-		 * Removes all but the first element from every consecutive group of equal elements in the 
-		 * 
-		 * The argument <i>binary_pred</i> is a specific comparison function that determine the <u>uniqueness</u> 
-		 * of an element. In fact, any behavior can be implemented (and not only an equality comparison), but notice 
-		 * that the function will call <code>binary_pred(it.value, it.prev().value)</code> for all pairs of elements 
-		 * (where <code>it</code> is an iterator to an element, starting from the second) and remove <code>it</code> 
-		 * from the {@link List} if the predicate returns <code>true</code>.
-		 *
-		 * Notice that an element is only removed from the {@link List} container if it compares equal to the 
-		 * element immediately preceding it. Thus, this function is especially useful for sorted lists.
-		 * 
-		 * @param binary_pred Binary predicate that, taking two values of the same type than those contained in the 
-		 *					  {@link List}, returns <code>true</code> to remove the element passed as first argument 
-		 *					  from the container, and <code>false</code> otherwise. This shall be a function pointer 
-		 *					  or a function object.
-		 */
 		public unique(binary_pred: (left: T, right: T) => boolean): void;
 
 		public unique(binary_pred: (left: T, right: T) => boolean = equal_to): void
@@ -511,20 +225,6 @@ namespace std
 			}
 		}
 
-		/**
-		 * Remove elements with specific value.
-		 * 
-		 * Removes from the container all the elements that compare equal to <i>val</i>. This calls the 
-		 * destructor of these objects and reduces the container {@link size} by the number of elements removed.
-		 * 
-		 * Unlike member function {@link List.erase}, which erases elements by their position (using an 
-		 * iterator), this function ({@link List.remove}) removes elements by their value.
-		 * 
-		 * A similar function, {@link List.remove_if}, exists, which allows for a condition other than an 
-		 * equality comparison to determine whether an element is removed.
-		 *
-		 * @param val Value of the elements to be removed.
-		 */
 		public remove(val: T): void
 		{
 			let it = this.begin();
@@ -538,22 +238,6 @@ namespace std
 			}
 		}
 
-		/**
-		 * Remove elements fulfilling condition.
-		 * 
-		 * Removes from the container all the elements for which <i>pred</i> returns <code>true</code>. This 
-		 * calls the destructor of these objects and reduces the container {@link size} by the number of elements 
-		 * removed.
-		 * 
-		 * The function calls <code>pred(it.value)</code> for each element (where <code>it</code> is an iterator 
-		 * to that element). Any of the elements in the list for which this returns <code>true</code>, are removed 
-		 * from the 
-		 * 
-		 * @param pred Unary predicate that, taking a value of the same type as those contained in the forward_list 
-		 *			   object, returns <code>true</code> for those values to be removed from the container, and 
-		 *			   <code>false</code> for those remaining. This can either be a function pointer or a function 
-		 *			   object.
-		 */
 		public remove_if(pred: (val: T) => boolean): void
 		{
 			let it = this.begin();
@@ -570,72 +254,8 @@ namespace std
 		/* ---------------------------------------------------------
 			MERGE & SPLICE
 		--------------------------------------------------------- */
-		/**
-		 * Merge sorted {@link List Lists}.
-		 *
-		 * Merges <i>obj</i> into the {@link List} by transferring all of its elements at their respective 
-		 * ordered positions into the container (<font color='red'>both containers shall already be ordered</font>). 
-		 *
-		 * 
-		 * This effectively removes all the elements in <i>obj</i> (which becomes {@link empty}), and inserts 
-		 * them into their ordered position within container (which expands in {@link size} by the number of elements 
-		 * transferred). The operation is performed without constructing nor destroying any element: they are 
-		 * transferred, no matter whether <i>obj</i> is an lvalue or an rvalue, or whether the value_type supports 
-		 * move-construction or not.
-		 * 
-		 * This function requires that the {@link List} containers have their elements already ordered by value 
-		 * ({@link less}) before the call. For an alternative on unordered {@link List Lists}, see 
-		 * {@link List.splice}.
-		 * 
-		 * Assuming such ordering, each element of <i>obj</i> is inserted at the position that corresponds to its 
-		 * value according to the strict weak ordering defined by {@link less}. The resulting order of equivalent 
-		 * elements is stable (i.e., equivalent elements preserve the relative order they had before the call, and 
-		 * existing elements precede those equivalent inserted from <i>obj</i>).
-		 * 
-		 * The function does nothing if <code>this == obj</code>.
-		 * 
-		 * @param obj A {@link List} object of the same type (i.e., with the same template parameters, <b>T</b>).
-		 * 			  Note that this function modifies <i>obj</i> no matter whether an lvalue or rvalue reference is 
-		 *			  passed.
-		 */
 		public merge<U extends T>(obj: List<U>): void;
 
-		/**
-		 * Merge sorted {@link List Lists}.
-		 *
-		 * Merges <i>obj</i> into the {@link List} by transferring all of its elements at their respective 
-		 * ordered positions into the container (<font color='red'>both containers shall already be ordered</font>). 
-		 *
-		 * 
-		 * This effectively removes all the elements in <i>obj</i> (which becomes {@link empty}), and inserts 
-		 * them into their ordered position within container (which expands in {@link size} by the number of elements 
-		 * transferred). The operation is performed without constructing nor destroying any element: they are 
-		 * transferred, no matter whether <i>obj</i> is an lvalue or an rvalue, or whether the value_type supports 
-		 * move-construction or not.
-		 *
-		 * The argument <i>compare</i> is a specific predicate to perform the comparison operation between 
-		 * elements. This comparison shall produce a strict weak ordering of the elements (i.e., a consistent 
-		 * transitive comparison, without considering its reflexiveness).
-		 * 
-		 * This function requires that the {@link List} containers have their elements already ordered by 
-		 * <i>compare</i> before the call. For an alternative on unordered {@link List Lists}, see 
-		 * {@link List.splice}.
-		 * 
-		 * Assuming such ordering, each element of <i>obj</i> is inserted at the position that corresponds to its 
-		 * value according to the strict weak ordering defined by <i>compare</i>. The resulting order of equivalent 
-		 * elements is stable (i.e., equivalent elements preserve the relative order they had before the call, and 
-		 * existing elements precede those equivalent inserted from <i>obj</i>).
-		 * 
-		 * The function does nothing if <code>this == obj</code>.
-		 * 
-		 * @param obj A {@link List} object of the same type (i.e., with the same template parameters, <b>T</b>).
-		 * 			  Note that this function modifies <i>obj</i> no matter whether an lvalue or rvalue reference is 
-		 *			  passed.
-		 * @param compare Binary predicate that, taking two values of the same type than those contained in the 
-		 *				  {@link list}, returns <code>true</code> if the first argument is considered to go before 
-		 *				  the second in the strict weak ordering it defines, and <code>false</code> otherwise. 
-		 *				  This shall be a function pointer or a function object.
-		 */
 		public merge<U extends T>(obj: List<U>, compare: (left: T, right: T) => boolean): void;
 
 		public merge<U extends T>(obj: List<U>, compare: (left: T, right: T) => boolean = less): void
@@ -655,71 +275,10 @@ namespace std
 			}
 		}
 
-		/**
-		 * Transfer elements from {@link List} to {@link List}.
-		 * 
-		 * Transfers elements from <i>obj</i> into the container, inserting them at <i>position</i>.
-		 * 
-		 * This effectively inserts all elements into the container and removes them from <i>obj</i>, altering 
-		 * the sizes of both containers. The operation does not involve the construction or destruction of any 
-		 * element. They are transferred, no matter whether <i>obj</i> is an lvalue or an rvalue, or whether the 
-		 * value_type supports move-construction or not.
-		 *
-		 * This first version (1) transfers all the elements of <i>obj</i> into the 
-		 * 
-		 * @param position Position within the container where the elements of <i>obj</i> are inserted.
-		 * @param obj A {@link List} object of the same type (i.e., with the same template parameters, <b>T</b>).
-		 */
 		public splice<U extends T>(position: ListIterator<T>, obj: List<U>): void;
 		
-		/**
-		 * Transfer an element from {@link List} to {@link List}.
-		 * 
-		 * Transfers an element from <i>obj</i>, which is pointed by an {@link ListIterator iterator} <i>it</i>, 
-		 * into the container, inserting the element at specified <i>position</i>.
-		 * 
-		 * This effectively inserts an element into the container and removes it from <i>obj</i>, altering the 
-		 * sizes of both containers. The operation does not involve the construction or destruction of any element. 
-		 * They are transferred, no matter whether <i>obj</i> is an lvalue or an rvalue, or whether the value_type 
-		 * supports move-construction or not.
-		 *
-		 * This second version (2) transfers only the element pointed by <i>it</i> from <i>obj</i> into the 
-		 * 
-		 * 
-		 * @param position Position within the container where the element of <i>obj</i> is inserted.
-		 * @param obj A {@link List} object of the same type (i.e., with the same template parameters, <b>T</b>).
-		 *			  This parameter may be <code>this</code> if <i>position</i> points to an element not actually 
-		 *			  being spliced.
-		 * @param it {@link ListIterator base.Iterator} to an element in <i>obj</i>. Only this single element is 
-		 *			 transferred.
-		 */
 		public splice<U extends T>(position: ListIterator<T>, obj: List<U>, it: ListIterator<U>): void;
 		
-		/**
-		 * Transfer elements from {@link List} to {@link List}.
-		 *
-		 * Transfers elements from <i>obj</i> into the container, inserting them at <i>position</i>.
-		 *
-		 * This effectively inserts those elements into the container and removes them from <i>obj</i>, altering 
-		 * the sizes of both containers. The operation does not involve the construction or destruction of any 
-		 * element. They are transferred, no matter whether <i>obj</i> is an lvalue or an rvalue, or whether the 
-		 * value_type supports move-construction or not.
-		 *
-		 * This third version (3) transfers the range [<i>begin</i>, <i>end</i>) from <i>obj</i> into the 
-		 * 
-		 * 
-		 * @param position Position within the container where the elements of <i>obj</i> are inserted.
-		 * @param obj A {@link List} object of the same type (i.e., with the same template parameters, <b>T</b>).
-		 *			  This parameter may be <code>this</code> if <i>position</i> points to an element not actually
-		 *			  being spliced.
-		 * @param begin {@link ListIterator An base.Iterator} specifying initial position of a range of elements in
-		 *				<i>obj</i>. Transfers the elements in the range [<b><i>begin</i></b>, <i>end</i>) to 
-		 *				<i>position</i>.
-		 * @param end {@link ListIterator An base.Iterator} specifying final position of a range of elements in
-		 *			  <i>obj</i>. Transfers the elements in the range [<i>begin</i>, <b><i>end</i></b>) to
-		 *			  <i>position</i>. Notice that the range includes all the elements between <i>begin<i/> and 
-		 *			  <i>end</i>, including the element pointed by <i>begin</i> but not the one pointed by <i>end</i>.
-		 */
 		public splice<U extends T>
 			(position: ListIterator<T>, obj: List<U>, begin: ListIterator<U>, end: ListIterator<U>): void;
 
@@ -745,43 +304,8 @@ namespace std
 		/* ---------------------------------------------------------
 			SORT
 		--------------------------------------------------------- */
-		/**
-		 * Sort elements in 
-		 * 
-		 * Sorts the elements in the {@link List}, altering their position within the 
-		 * 
-		 * The sorting is performed by applying an algorithm that uses {@link less}. This comparison shall 
-		 * produce a strict weak ordering of the elements (i.e., a consistent transitive comparison, without 
-		 * considering its reflexiveness).
-		 * 
-		 * The resulting order of equivalent elements is stable: i.e., equivalent elements preserve the relative 
-		 * order they had before the call.
-		 * 
-		 * The entire operation does not involve the construction, destruction or copy of any element object. 
-		 * Elements are moved within the 
-		 */
 		public sort(): void;
 
-		/**
-		 * Sort elements in 
-		 * 
-		 * Sorts the elements in the {@link List}, altering their position within the 
-		 * 
-		 * The sorting is performed by applying an algorithm that uses <i>compare</i>. This comparison shall 
-		 * produce a strict weak ordering of the elements (i.e., a consistent transitive comparison, without 
-		 * considering its reflexiveness).
-		 * 
-		 * The resulting order of equivalent elements is stable: i.e., equivalent elements preserve the relative 
-		 * order they had before the call.
-		 * 
-		 * The entire operation does not involve the construction, destruction or copy of any element object. 
-		 * Elements are moved within the 
-		 *
-		 * @param compare Binary predicate that, taking two values of the same type of those contained in the 
-		 *				  {@link List}, returns <code>true</code> if the first argument goes before the second 
-		 *				  argument in the strict weak ordering it defines, and <code>false</code> otherwise. This 
-		 *				  shall be a function pointer or a function object.
-		 */
 		public sort(compare: (left: T, right: T) => boolean): void;
 
 		public sort(compare: (left: T, right: T) => boolean = less): void
@@ -825,11 +349,6 @@ namespace std
 			return prev;
 		}
 
-		/**
-		 * Reverse the order of elements.
-		 *
-		 * Reverses the order of the elements in the list container.
-		 */
 		public reverse(): void
 		{
 			let begin: ListIterator<T> = this.end().prev();
@@ -852,28 +371,8 @@ namespace std
 		/* ---------------------------------------------------------
 			SWAP
 		--------------------------------------------------------- */
-		/**
-		 * Swap content.
-		 * 
-		 * Exchanges the content of the container by the content of <i>obj</i>, which is another 
-		 * {@link List container} object with same type of elements. Sizes and container type may differ.
-		 * 
-		 * After the call to this member function, the elements in this container are those which were in <i>obj</i> 
-		 * before the call, and the elements of <i>obj</i> are those which were in this. All iterators, references and 
-		 * pointers remain valid for the swapped objects.
-		 *
-		 * Notice that a non-member function exists with the same name, {@link swap swap}, overloading that 
-		 * algorithm with an optimization that behaves like this member function.
-		 * 
-		 * @param obj Another {@link List container} of the same type of elements (i.e., instantiated
-		 *			  with the same template parameter, <b>T</b>) whose content is swapped with that of this 
-		 *			  {@link List container}.
-		 */
 		public swap(obj: List<T>): void
 
-		/**
-		 * @inheritdoc
-		 */
 		public swap(obj: base.Container<T>): void;
 
 		public swap(obj: List<T> | base.Container<T>): void

@@ -17,9 +17,6 @@ namespace std
 		/* ---------------------------------------------------------
 			CONSTRUCTORS
 		--------------------------------------------------------- */
-		/**
-		 * Default Constructor.
-		 */
 		public constructor()
 		{
 			this.lock_count_ = 0;
@@ -40,11 +37,6 @@ namespace std
 			});
 		}
 
-		/**
-		 * Lock mutex if not locked.
-		 * 
-		 * Attempts to lock the {@link Mutex}, without blocking:
-		 */
 		public try_lock(): boolean
 		{
 			if (this.lock_count_ != 0)
