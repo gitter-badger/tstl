@@ -4,9 +4,6 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export abstract class _MapTree<Key, T, Source extends IMapContainer<Key, T>>
 		extends _XTree<MapIterator<Key, T, Source>>
 	{

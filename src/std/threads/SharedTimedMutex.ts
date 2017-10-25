@@ -4,27 +4,15 @@ namespace std
 {
 	export class SharedTimedMutex implements ILockable
 	{
-		/**
-		 * @hidden
-		 */
 		private read_lock_count_: number;
 
-		/**
-		 * @hidden
-		 */
 		private write_lock_count_: number;
 
-		/**
-		 * @hidden
-		 */
 		private resolvers_: HashMap<IResolver, ILockType>;
 
 		/* ---------------------------------------------------------
 			CONSTRUCTORS
 		--------------------------------------------------------- */
-		/**
-		 * Default Constructor.
-		 */
 		public constructor()
 		{
 			this.read_lock_count_ = 0;

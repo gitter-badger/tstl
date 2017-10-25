@@ -4,9 +4,6 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export class _UniqueMapTree<Key, T, Source extends IUniqueMap<Key, T>>
 		extends _MapTree<Key, T, Source>
 	{

@@ -4,20 +4,11 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export class _SetElementList<T, Source extends ISetContainer<T>> 
 		extends _ListContainer<T, SetIterator<T, Source>>
 	{
-		/**
-		 * @hidden
-		 */
 		private associative_: Source;
 
-		/**
-		 * @hidden
-		 */
 		private rend_: SetReverseIterator<T, Source>;
 
 		/* ---------------------------------------------------------

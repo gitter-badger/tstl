@@ -2,9 +2,6 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export class _DequeForOfAdaptor<T> implements IterableIterator<T>
 	{
 		private matrix_: T[][];

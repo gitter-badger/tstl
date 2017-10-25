@@ -2,27 +2,13 @@
 
 namespace std
 {
-	/**
-	 * Condition variable.
-	 * 
-	 * {@link ConditionVariable} is an object able to block until *notified* to resume.
-	 * 
-	 * @reference http://www.cplusplus.com/reference/condition_variable/condition_variable/
-	 * @author Jeongho Nam <http://samchon.org>
-	 */
 	export class ConditionVariable
 	{
-		/**
-		 * @hidden
-		 */
 		private resolvers_: HashMap<IResolver, boolean>;
 
 		/* ---------------------------------------------------------
 			CONSTRUCTORS
 		--------------------------------------------------------- */
-		/**
-		 * Default Constructor.
-		 */
 		public constructor()
 		{
 			this.resolvers_ = new HashMap<IResolver, boolean>();
@@ -31,9 +17,6 @@ namespace std
 		/* ---------------------------------------------------------
 			WAITERS
 		--------------------------------------------------------- */
-		/**
-		 * Wait until notified.
-		 */
 		public wait(): Promise<void>
 		{
 			return new Promise<void>(resolve => 
@@ -42,11 +25,6 @@ namespace std
 			});
 		}
 
-		/**
-		 * Wait until notified or timeout.
-		 * 
-		 * @param ms Milliseconds of specified timeout.
-		 */
 		public wait_for(ms: number): Promise<boolean>
 		{
 			return new Promise<boolean>(resolve =>
@@ -66,11 +44,6 @@ namespace std
 			});
 		}
 
-		/**
-		 * Wait until notified or tie point.
-		 * 
-		 * @param at Specified time point.
-		 */
 		public wait_until(at: Date): Promise<boolean>
 		{
 			// COMPUTE MILLISECONDS TO WAIT
@@ -83,13 +56,6 @@ namespace std
 		/* ---------------------------------------------------------
 			NOTIFIERS
 		--------------------------------------------------------- */
-		/**
-		 * Notify one.
-		 * 
-		 * Unlocks only one currently *waiting* for this condition.
-		 * 
-		 * If there's nothing to *wait*, then this method does nothing.
-		 */
 		public notify_one(): void
 		{
 			// NOTHING TO NOTIFY
@@ -107,13 +73,6 @@ namespace std
 			this.resolvers_.erase(it);	
 		}
 
-		/**
-		 * Notify all.
-		 * 
-		 * Unblocks all currently *waiting* for this condition.
-		 * 
-		 * If there's nothing to *wait*, then this method does nothing.
-		 */
 		public notify_all(): void
 		{
 			// NOTHING TO NOTIFY

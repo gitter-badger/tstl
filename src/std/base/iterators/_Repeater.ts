@@ -2,9 +2,6 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export class _Repeater<T>
 		extends Iterator<T>
 	{

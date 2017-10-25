@@ -4,9 +4,6 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export class _SetHashBuckets<T, Source extends ISetContainer<T>>
 		extends _HashBuckets<SetIterator<T, Source>>
 	{

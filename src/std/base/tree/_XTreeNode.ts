@@ -2,9 +2,6 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export class _XTreeNode<T>
 	{
 		private static sequence: number = 0;

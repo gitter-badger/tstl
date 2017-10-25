@@ -4,24 +4,12 @@ namespace std
 {
 	export class ForwardList<T> implements Iterable<T>
 	{
-		/**
-		 * @hidden
-		 */
 		private ptr_: IPointer<ForwardList<T>>;
 
-		/**
-		 * @hidden
-		 */
 		private size_: number;
 
-		/**
-		 * @hidden
-		 */
 		private before_begin_: ForwardList.Iterator<T>;
 
-		/**
-		 * @hidden
-		 */
 		private end_: ForwardList.Iterator<T>;
 
 		/* =========================================================
@@ -31,16 +19,8 @@ namespace std
 		============================================================
 			CONSTURCTORS
 		--------------------------------------------------------- */
-		/**
-		 * Default Constructor.
-		 */
 		public constructor();
 
-		/**
-		 * Copy Constructor.
-		 * 
-		 * @param obj Target container to be copied.
-		 */
 		public constructor(obj: ForwardList<T>);
 		public constructor(n: number, val: T);
 		public constructor(first: IForwardIterator<T>, last: IForwardIterator<T>);
@@ -265,28 +245,12 @@ namespace std.ForwardList
 {
 	export class Iterator<T> implements IForwardIterator<T>
 	{
-		/**
-		 * @hidden
-		 */
 		private source_ptr_: IPointer<ForwardList<T>>;
 
-		/**
-		 * @hidden
-		 */
 		private next_: Iterator<T>;
 
-		/**
-		 * @hidden
-		 */
 		private value_: T;
 
-		/**
-		 * Initiailizer Constructor.
-		 * 
-		 * @param source 
-		 * @param next 
-		 * @param value 
-		 */
 		public constructor(source: IPointer<ForwardList<T>>, next: Iterator<T>, value: T)
 		{
 			this.source_ptr_ = source;

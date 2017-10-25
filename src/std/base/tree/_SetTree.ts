@@ -4,9 +4,6 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export abstract class _SetTree<T, Source extends ISetContainer<T>>
 		extends _XTree<SetIterator<T, Source>>
 	{
@@ -16,9 +13,6 @@ namespace std.base
 		/* ---------------------------------------------------------
 			CONSTRUCTOR
 		--------------------------------------------------------- */
-		/**
-		 * Default Constructor.
-		 */
         public constructor
 			(
 				set: Source, 

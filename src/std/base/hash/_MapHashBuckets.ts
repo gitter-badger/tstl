@@ -4,9 +4,6 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export class _MapHashBuckets<Key, T, Source extends IMapContainer<Key, T>>
 		extends _HashBuckets<MapIterator<Key, T, Source>>
 	{

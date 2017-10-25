@@ -9,9 +9,6 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export abstract class _XTree<T>
 	{
 		protected root_: _XTreeNode<T>;

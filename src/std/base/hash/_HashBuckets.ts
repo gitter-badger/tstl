@@ -2,9 +2,6 @@
 
 namespace std.base
 {
-    /**
-     * @hidden
-     */
 	export enum _Hash
 	{
 		MIN_SIZE = 10,
@@ -12,9 +9,6 @@ namespace std.base
 		MAX_RATIO = 2.0
 	}
 
-	/**
-	 * @hidden
-	 */
 	export abstract class _HashBuckets<T>
 	{
 		private buckets_: Vector<Vector<T>>;

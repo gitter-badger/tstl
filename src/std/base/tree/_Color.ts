@@ -2,9 +2,6 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export enum _Color
 	{
 		BLACK,

@@ -5,31 +5,16 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export abstract class _ListIteratorBase<T>
 		extends Iterator<T>
 		implements IComparable<_ListIteratorBase<T>>
 	{
-		/**
-		 * @hidden
-		 */
 		protected prev_: _ListIteratorBase<T>;
 
-		/**
-		 * @hidden
-		 */
 		protected next_: _ListIteratorBase<T>;
 
-		/**
-		 * @hidden
-		 */
 		protected value_: T;
 
-		/**
-		 * @hidden
-		 */
 		protected constructor(prev: _ListIteratorBase<T>, next: _ListIteratorBase<T>, value: T)
 		{
 			super();
@@ -42,25 +27,16 @@ namespace std.base
 		/* ---------------------------------------------------------------
 			ACCESSORS
 		--------------------------------------------------------------- */
-		/**
-		 * @inheritdoc
-		 */
 		public prev(): _ListIteratorBase<T>
 		{
 			return this.prev_;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public next(): _ListIteratorBase<T>
 		{
 			return this.next_;
 		}
 
-		 /**
-		  * @inheritdoc
-		  */
 		public advance(step: number): _ListIteratorBase<T>
 		{
 			let it: _ListIteratorBase<T> = this;
@@ -88,9 +64,6 @@ namespace std.base
 			return it;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public get value(): T
 		{
 			return this.value_;
@@ -99,17 +72,11 @@ namespace std.base
 		/* ---------------------------------------------------------------
 			COMPARISON
 		--------------------------------------------------------------- */
-		/**
-		 * @inheritdoc
-		 */
 		public equals(obj: _ListIteratorBase<T>): boolean
 		{
 			return this == obj;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public swap(obj: _ListIteratorBase<T>): void
 		{
 			let source: _ListContainer<T, _ListIteratorBase<T>> = this.source() as _ListContainer<T, _ListIteratorBase<T>>;

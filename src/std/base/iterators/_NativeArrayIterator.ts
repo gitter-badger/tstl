@@ -2,9 +2,6 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export class _NativeArrayIterator<T> extends Iterator<T>
 	{
 		private data_: Array<T>;

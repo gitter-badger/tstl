@@ -4,22 +4,13 @@ namespace std
 {
 	export class TimedMutex implements ILockable
 	{
-		/**
-		 * @hidden
-		 */
 		private lock_count_: number;
 
-		/**
-		 * @hidden
-		 */
 		private resolvers_: HashMap<IResolver, boolean>;
 
 		/* ---------------------------------------------------------
 			CONSTRUCTORS
 		--------------------------------------------------------- */
-		/**
-		 * Default Constructor.
-		 */
 		public constructor()
 		{
 			this.lock_count_ = 0;
@@ -29,9 +20,6 @@ namespace std
 		/* ---------------------------------------------------------
 			LOCK & UNLOCK
 		--------------------------------------------------------- */
-		/**
-		 * @inheritDoc
-		 */
 		public lock(): Promise<void>
 		{
 			return new Promise<void>(resolve =>
@@ -43,9 +31,6 @@ namespace std
 			});
 		}
 
-		/**
-		 * @inheritDoc
-		 */
 		public try_lock(): boolean
 		{
 			if (this.lock_count_ != 0)
@@ -55,9 +40,6 @@ namespace std
 			return true;			
 		}
 
-		/**
-		 * @inheritDoc
-		 */
 		public unlock(): void
 		{
 			if (this.lock_count_ == 0)
@@ -83,11 +65,6 @@ namespace std
 		/* ---------------------------------------------------------
 			TIMED LOCK
 		--------------------------------------------------------- */
-		/**
-		 * Lock or timeout.
-		 * 
-		 * @param ms Milliseconds of specified timeout.
-		 */
 		public try_lock_for(ms: number): Promise<boolean>
 		{
 			return new Promise<boolean>(resolve =>

@@ -4,20 +4,11 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export class _MapElementList<Key, T, Source extends IMapContainer<Key, T>> 
 		extends _ListContainer<Entry<Key, T>, MapIterator<Key, T, Source>>
 	{
-		/**
-		 * @hidden
-		 */
 		private associative_: Source;
 
-		/**
-		 * @hidden
-		 */
 		private rend_: MapReverseIterator<Key, T, Source>;
 
 		/* ---------------------------------------------------------

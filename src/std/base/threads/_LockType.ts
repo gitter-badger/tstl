@@ -2,9 +2,6 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export class _LockType
 	{
 		public static readonly WRITE: boolean = false;

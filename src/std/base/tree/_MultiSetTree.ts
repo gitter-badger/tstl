@@ -4,9 +4,6 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export class _MultiSetTree<T, Source extends IMultiSet<T>>
 		extends _SetTree<T, Source>
 	{

@@ -4,9 +4,6 @@
 
 namespace std.base
 {
-	/**
-	 * @hidden
-	 */
 	export class _UniqueSetTree<T, Source extends IUniqueSet<T>>
 		extends _SetTree<T, Source>
 	{
